@@ -121,6 +121,18 @@
         }
         .draggable-canvas-item:active { cursor: grabbing; }
 
+        /* Agenda Grid Alignment Fixes */
+        .agenda-grid-container {
+            display: grid;
+            grid-template-columns: 80px repeat(7, minmax(110px, 1fr));
+        }
+        .agenda-cell {
+            border-right: 1px solid var(--pink-border);
+            border-bottom: 1px solid var(--pink-border);
+            height: 48px;
+            box-sizing: border-box;
+        }
+
         /* Confetti Overlay guarantees click-through */
         #confetti-container, .decal-overlay {
             pointer-events: none !important;
@@ -204,7 +216,7 @@
                     <i class="fa-solid fa-square-check text-accent-glam"></i> Habits
                 </button>
                 <button onclick="switchTab('petroom')" id="tab-petroom" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
-                    <i class="fa-solid fa-paw text-accent-glam"></i> Pet Room & Shop
+                    <i class="fa-solid fa-paw text-accent-glam"></i> La Boutique & Pet Room
                 </button>
             </nav>
         </div>
@@ -351,10 +363,10 @@
             <div class="retro-box p-5 bg-white space-y-3">
                 <div class="flex flex-col md:flex-row items-center gap-3">
                     <div class="flex items-center gap-2 font-bold text-xs text-[var(--pink-dark)] whitespace-nowrap">
-                        <i class="fa-solid fa-wand-magic-sparkles text-accent-glam"></i> Quick Smart Event Parser:
+                        <i class="fa-solid fa-wand-magic-sparkles text-accent-glam"></i> Quick Natural Language Parser:
                     </div>
                     <div class="relative w-full">
-                        <input type="text" id="smart-agenda-input" placeholder="e.g. 'Piano Practice on Wednesday at 15:00' or 'Gala Friday 9am'" 
+                        <input type="text" id="smart-agenda-input" placeholder="e.g. '11/25 piano 3' or '11/25 piano 3:00 p.m.' or 'Friday gala 9am'" 
                             class="w-full px-4 py-2 rounded-xl border-2 border-[var(--pink-primary)] focus:outline-none text-xs bg-pink-50/30">
                         <button onclick="parseSmartAgendaEvent()" class="absolute right-1 top-1 bottom-1 retro-button px-3.5 rounded-lg text-xs font-bold">
                             Quick Add
@@ -384,7 +396,7 @@
             <!-- 24-Hour Grid Container -->
             <div class="retro-box bg-white overflow-x-auto">
                 <div class="min-w-[850px]">
-                    <div id="agenda-grid-header" class="grid grid-cols-8 border-b-2 border-[var(--pink-primary)] bg-[var(--pink-secondary)] text-center text-xs font-bold">
+                    <div id="agenda-grid-header" class="agenda-grid-container border-b-2 border-[var(--pink-primary)] bg-[var(--pink-secondary)] text-center text-xs font-bold">
                         <div class="py-3 border-r border-[var(--pink-border)]">Time (24h)</div>
                         <!-- Days populated via JS -->
                     </div>
@@ -439,7 +451,7 @@
         </section>
 
 
-        <!-- ================= TAB 5: PET ROOM & BOUTIQUE ================= -->
+        <!-- ================= TAB 5: PET ROOM & LA BOUTIQUE ================= -->
         <section id="page-petroom" class="tab-page hidden space-y-8">
             
             <!-- Virtual Pet Bedroom Screen -->
@@ -449,7 +461,7 @@
                         <h2 class="custom-title-font text-2xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
                             <i class="fa-solid fa-paw text-accent-glam"></i> Mon Petit Pet Sanctuary
                         </h2>
-                        <p class="text-xs text-subtle">Drag pets, toys, food, and hygiene items freely across the bedroom canvas!</p>
+                        <p class="text-xs text-subtle">Drag pets, toys, food, hygiene, and furniture freely across the bedroom canvas!</p>
                     </div>
                     
                     <div class="flex flex-wrap gap-2">
@@ -517,28 +529,28 @@
                         <div class="bg-white/90 p-5 rounded-2xl border-2 border-[var(--pink-primary)] max-w-sm backdrop-blur-xs">
                             <i class="fa-solid fa-paw text-3xl text-accent-glam mb-2"></i>
                             <h4 class="font-bold text-sm text-[var(--pink-dark)]">Your Pet Room Canvas</h4>
-                            <p class="text-xs text-subtle mt-1">Open <b>Inventory</b> to place purchased pets, toys, or foods! Drag items over pets to care for them!</p>
+                            <p class="text-xs text-subtle mt-1">Open <b>Inventory</b> to place purchased pets, toys, food, or furniture! Drag items over pets to care for them!</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Boutique Shop (1 Item per category daily) -->
+            <!-- La Boutique (1 Item per category daily across 5 categories) -->
             <div class="space-y-4">
                 <div class="flex flex-wrap justify-between items-center border-b-2 border-[var(--pink-primary)] pb-3 gap-3">
                     <div>
                         <h3 class="custom-title-font text-2xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
-                            <i class="fa-solid fa-store text-accent-glam"></i> La Boutique & Pet Supply
+                            <i class="fa-solid fa-store text-accent-glam"></i> La Boutique
                         </h3>
-                        <p class="text-xs text-subtle">Daily Rotation: 1 item per category displayed daily! Consumables can be bought multiple times.</p>
+                        <p class="text-xs text-subtle">Daily Rotation: 1 item per category (Pet, Food, Toy, Hygiene, Furniture) featured daily!</p>
                     </div>
 
-                    <button onclick="openModal('edit-master-catalog-modal')" class="retro-button px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
-                        <i class="fa-solid fa-pen-to-square"></i> Master Catalog Editor
+                    <button onclick="openFullStoreCatalogModal()" class="retro-button px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group"></i> View Full Store Catalog
                     </button>
                 </div>
 
-                <div id="daily-shop-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div id="daily-shop-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <!-- Daily shop items -->
                 </div>
             </div>
@@ -639,7 +651,7 @@
 
     <!-- Edit/Add Task Event Modal -->
     <div id="edit-event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
+        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
                 <h3 id="event-modal-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Task Event</h3>
                 <button onclick="closeModal('edit-event-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -651,8 +663,12 @@
                     <input type="text" id="event-title-input" placeholder="e.g. Piano Practice" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Date & Time</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Start Date & Time</label>
                     <input type="datetime-local" id="event-datetime-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">End Date (Optional for Multi-Day Range)</label>
+                    <input type="date" id="event-enddate-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Complexity Level (1 - 5 Level)</label>
@@ -667,6 +683,10 @@
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Custom Block Color</label>
                     <input type="color" id="event-color-input" value="#FF66A3" class="w-full h-9 rounded cursor-pointer border border-pink-300">
+                </div>
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Quick Notes (Unlimited Text)</label>
+                    <textarea id="event-notes-input" rows="3" placeholder="Add custom notes, details, reminders..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none"></textarea>
                 </div>
             </div>
             <div class="flex justify-between items-center pt-2">
@@ -797,13 +817,21 @@
     <div id="custom-bg-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Set Bedroom Wallpaper Image URL</h3>
+                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Set Bedroom Wallpaper Image</h3>
                 <button onclick="closeModal('custom-bg-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Image URL</label>
                     <input type="text" id="custom-bg-url-input" placeholder="https://..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                </div>
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-pink-200"></div>
+                    <span class="flex-shrink mx-2 text-[10px] text-subtle font-bold">OR UPLOAD FILE</span>
+                    <div class="flex-grow border-t border-pink-200"></div>
+                </div>
+                <div>
+                    <input type="file" id="custom-bg-file-input" accept="image/*" class="w-full text-xs text-[var(--pink-dark)]">
                 </div>
             </div>
             <div class="flex justify-end gap-2 pt-2">
@@ -813,30 +841,30 @@
         </div>
     </div>
 
-    <!-- Master Catalog Editor Modal -->
-    <div id="edit-master-catalog-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-        <div class="retro-box max-w-2xl w-full p-6 bg-white space-y-4 max-h-[90vh] flex flex-col">
+    <!-- View Full Store Catalog Modal -->
+    <div id="full-store-catalog-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="retro-box max-w-3xl w-full p-6 bg-white space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Master Boutique Catalog Manager</h3>
-                <button onclick="closeModal('edit-master-catalog-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]"><i class="fa-solid fa-store text-accent-glam"></i> Full Store Catalog Manager</h3>
+                <button onclick="closeModal('full-store-catalog-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <div class="flex justify-between items-center">
-                <p class="text-xs text-subtle">Add custom pets, toys, food, or hygiene items!</p>
+            <div class="flex flex-wrap justify-between items-center gap-2">
+                <p class="text-xs text-subtle">Manage all boutique items across 5 categories!</p>
                 <button onclick="openAddNewCatalogItemForm()" class="retro-button px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
                     <i class="fa-solid fa-plus"></i> Create Catalog Item
                 </button>
             </div>
 
-            <div id="master-catalog-list" class="space-y-3 overflow-y-auto p-1 flex-grow">
-                <!-- Master Catalog Items -->
+            <div id="full-catalog-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto p-1 flex-grow">
+                <!-- Full Catalog Items -->
             </div>
         </div>
     </div>
 
-    <!-- Single Catalog Item Form Modal -->
+    <!-- Single Catalog Item Form Modal with Smart Transparency & Color Key Remover -->
     <div id="catalog-item-form-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
+        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
                 <h3 id="catalog-form-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Catalog Item</h3>
                 <button onclick="closeModal('catalog-item-form-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -854,6 +882,7 @@
                         <option value="food">Food</option>
                         <option value="toy">Toy</option>
                         <option value="hygiene">Hygiene / Medicine</option>
+                        <option value="furniture">Furniture</option>
                     </select>
                 </div>
                 <div>
@@ -864,9 +893,29 @@
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Image URL</label>
                     <input type="text" id="cat-img-input" placeholder="https://..." class="w-full p-2 border-2 border-[var(--pink-primary)] rounded-xl">
                 </div>
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Or Upload Local Image File</label>
+                    <input type="file" id="cat-file-input" accept="image/*" onchange="handleCatalogFileUpload(event)" class="w-full text-xs text-[var(--pink-dark)]">
+                </div>
+
+                <div class="border-t border-pink-200 pt-2 space-y-2">
+                    <label class="block font-bold text-[var(--pink-dark)]">Image Background Removal Options</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="applySmartPNGTransparency()" class="px-3 py-1.5 bg-pink-100 hover:bg-pink-200 border border-pink-400 rounded-lg text-[11px] font-bold">
+                            ✨ Smart PNG Edge Remover
+                        </button>
+                        <div class="flex items-center gap-1">
+                            <input type="color" id="key-color-picker" value="#ffffff" class="w-7 h-7 rounded cursor-pointer border border-pink-300">
+                            <button onclick="applyColorKeyTransparency()" class="px-2.5 py-1.5 bg-pink-100 hover:bg-pink-200 border border-pink-400 rounded-lg text-[11px] font-bold">
+                                Key Out Color
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-2 pt-1">
                     <input type="checkbox" id="cat-transparent-input" class="w-4 h-4 accent-[var(--pink-accent)]">
-                    <label for="cat-transparent-input" class="font-bold text-[var(--pink-dark)]">Transparent PNG Rendering</label>
+                    <label for="cat-transparent-input" class="font-bold text-[var(--pink-dark)]">Render as Transparent PNG</label>
                 </div>
             </div>
             <div class="flex justify-end gap-2 pt-2">
@@ -880,7 +929,7 @@
     <!-- ================= MAIN CORE SCRIPT ================= -->
     <script>
         /* GLOBAL APPLICATION STATE & DATA MODEL */
-        const STORAGE_KEY = 'PinkLovePlanner_State_v3';
+        const STORAGE_KEY = 'PinkLovePlanner_State_v4';
 
         let appData = {
             currency: 150,
@@ -916,8 +965,8 @@
             ],
 
             events: [
-                { id: 'ev-1', title: 'Pilates Class & Juice', datetime: new Date(Date.now() + 86400000).toISOString().slice(0,16), complexity: 2, color: '#FF66A3' },
-                { id: 'ev-2', title: 'VIP Pre-Sale Gala', datetime: new Date(Date.now() + 172800000).toISOString().slice(0,16), complexity: 4, color: '#FF1493' }
+                { id: 'ev-1', title: 'Pilates Class & Juice', datetime: new Date(Date.now() + 86400000).toISOString().slice(0,16), complexity: 2, color: '#FF66A3', notes: 'Bring water and pink mat!' },
+                { id: 'ev-2', title: 'VIP Pre-Sale Gala', datetime: new Date(Date.now() + 172800000).toISOString().slice(0,16), complexity: 4, color: '#FF1493', notes: 'Dress code: Pink glam gown' }
             ],
 
             habits: [
@@ -933,7 +982,8 @@
                 { id: 'cat-fish', name: 'Gourmet Salmon', type: 'food', price: 25, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hunger: 40, happy: 25 }, icon: 'fa-fish' },
                 { id: 'cat-bone', name: 'Glitter Plush Toy', type: 'toy', price: 30, img: 'https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { happy: 35 }, icon: 'fa-baseball' },
                 { id: 'cat-ribbon', name: 'Silk Ribbon Bow', type: 'toy', price: 25, img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { happy: 30 }, icon: 'fa-ribbon' },
-                { id: 'cat-soap', name: 'Rose Bubble Bath', type: 'hygiene', price: 35, img: 'https://images.unsplash.com/photo-1607006482182-3d7110d90e66?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hygiene: 40, happy: 15 }, icon: 'fa-soap' }
+                { id: 'cat-soap', name: 'Rose Bubble Bath', type: 'hygiene', price: 35, img: 'https://images.unsplash.com/photo-1607006482182-3d7110d90e66?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hygiene: 40, happy: 15 }, icon: 'fa-soap' },
+                { id: 'cat-bed', name: 'Velvet Pet Bed', type: 'furniture', price: 50, img: 'https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { happy: 20 }, icon: 'fa-bed' }
             ],
 
             inventory: [
@@ -1031,7 +1081,7 @@
             const container = document.getElementById('confetti-container');
             const decalSrc = "https://dl7.glitter-graphics.net/pub/536/536397dgj9ef6ron.gif";
 
-            for (let i = 0; i < 18; i++) {
+            for (let i = 0; i < 22; i++) {
                 const img = document.createElement('img');
                 img.src = decalSrc;
                 img.className = 'confetti-decal';
@@ -1263,6 +1313,7 @@
                             </div>
                             <h4 class="custom-title-font font-bold text-base text-[var(--pink-dark)] mt-1">${item.title}</h4>
                             <p class="text-xs text-subtle italic mt-1">${new Date(item.datetime).toLocaleString()}</p>
+                            ${item.notes ? `<p class="text-[11px] text-pink-700 bg-pink-50 p-2 rounded-lg mt-2 border border-pink-200">${item.notes}</p>` : ''}
                         </div>
                         <div class="flex gap-2 pt-2">
                             <button onclick="openEditEventModal('${item.id}')" class="px-3 py-1.5 border border-pink-300 rounded-lg text-xs font-bold hover:bg-pink-50">Edit</button>
@@ -1307,14 +1358,20 @@
             saveToStorage();
         }
 
-        /* AGENDA 24H BLOCK PLANNER */
+        /* AGENDA 24H BLOCK PLANNER WITH ACCURATE CALENDAR DATES & MULTI-EVENT BADGES */
         function getWeekDays(offset = 0) {
             const curr = new Date();
-            const first = curr.getDate() - curr.getDay() + (offset * 7);
+            // Align to current week's Sunday
+            const dayOfWeek = curr.getDay(); // 0 = Sun
+            const sunday = new Date(curr);
+            sunday.setDate(curr.getDate() - dayOfWeek + (offset * 7));
+            sunday.setHours(0,0,0,0);
+
             const days = [];
             for (let i = 0; i < 7; i++) {
-                const next = new Date(curr.setDate(first + i));
-                days.push(next);
+                const d = new Date(sunday);
+                d.setDate(sunday.getDate() + i);
+                days.push(d);
             }
             return days;
         }
@@ -1327,6 +1384,13 @@
         function resetAgendaToCurrentWeek() {
             appData.currentAgendaWeekOffset = 0;
             renderAgendaGrid();
+        }
+
+        function formatDateKey(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
         function renderAgendaGrid() {
@@ -1351,31 +1415,40 @@
 
             for (let hour = 0; hour < 24; hour++) {
                 const hourStr = hour.toString().padStart(2, '0') + ':00';
-                rowsHTML += `<div class="grid grid-cols-8 min-h-[44px]">`;
-                rowsHTML += `<div class="p-2 border-r border-[var(--pink-border)] text-center text-[11px] font-bold text-subtle bg-pink-50/40 flex items-center justify-center">${hourStr}</div>`;
+                rowsHTML += `<div class="agenda-grid-container">`;
+                rowsHTML += `<div class="agenda-cell text-center text-[11px] font-bold text-subtle bg-pink-50/40 flex items-center justify-center">${hourStr}</div>`;
 
                 for (let dIdx = 0; dIdx < 7; dIdx++) {
-                    const cellDateStr = days[dIdx].toISOString().slice(0, 10);
+                    const cellDateStr = formatDateKey(days[dIdx]);
                     
                     const slotEvents = appData.events.filter(e => {
                         if (!e.datetime) return false;
                         const eDate = new Date(e.datetime);
-                        return eDate.toISOString().slice(0, 10) === cellDateStr && eDate.getHours() === hour;
+                        const eDateStr = formatDateKey(eDate);
+
+                        // Range match check if endDate exists
+                        if (e.enddate) {
+                            const startDateStr = eDateStr;
+                            const endDateStr = e.enddate;
+                            return cellDateStr >= startDateStr && cellDateStr <= endDateStr && eDate.getHours() === hour;
+                        }
+
+                        return eDateStr === cellDateStr && eDate.getHours() === hour;
                     });
 
                     if (slotEvents.length > 0) {
                         rowsHTML += `
-                            <div onclick="openMultiSlotModal('${cellDateStr}', ${hour})" class="p-1 border-r border-[var(--pink-border)] bg-pink-100/50 cursor-pointer hover:bg-pink-200 transition flex flex-col gap-1 overflow-hidden">
-                                ${slotEvents.map(ev => `
-                                    <div class="text-[10px] p-1 rounded font-bold truncate text-white shadow-xs" style="background-color: ${ev.color || 'var(--pink-primary)'}">
-                                        ${ev.title}
-                                    </div>
-                                `).join('')}
+                            <div onclick="openMultiSlotModal('${cellDateStr}', ${hour})" class="agenda-cell p-1 bg-pink-100/60 cursor-pointer hover:bg-pink-200 transition flex items-center justify-between overflow-hidden">
+                                <div class="truncate text-[10px] font-bold text-[var(--pink-dark)] flex items-center gap-1">
+                                    <span class="w-2.5 h-2.5 rounded-full inline-block shrink-0" style="background-color: ${slotEvents[0].color || 'var(--pink-primary)'}"></span>
+                                    ${slotEvents[0].title}
+                                </div>
+                                ${slotEvents.length > 1 ? `<span class="pixel-font text-[8px] bg-[var(--pink-accent)] text-white px-1.5 py-0.5 rounded-full shrink-0">+${slotEvents.length-1}</span>` : ''}
                             </div>
                         `;
                     } else {
                         rowsHTML += `
-                            <div onclick="openQuickAddSlot('${cellDateStr}', ${hour})" class="p-1 border-r border-[var(--pink-border)] hover:bg-pink-50 cursor-pointer transition"></div>
+                            <div onclick="openQuickAddSlot('${cellDateStr}', ${hour})" class="agenda-cell p-1 hover:bg-pink-50/80 cursor-pointer transition"></div>
                         `;
                     }
                 }
@@ -1385,16 +1458,54 @@
             body.innerHTML = rowsHTML;
         }
 
+        /* SMART NATURAL LANGUAGE PARSER FOR DATES & TIMES */
         function parseSmartAgendaEvent() {
             const input = document.getElementById('smart-agenda-input').value.trim();
             if (!input) return;
 
+            let parsedDate = new Date();
+            let title = input;
+
+            // Match month/day like 11/25 or 11/25/2026
+            const dateMatch = input.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+            if (dateMatch) {
+                const month = parseInt(dateMatch[1]) - 1;
+                const day = parseInt(dateMatch[2]);
+                const year = dateMatch[3] ? (dateMatch[3].length === 2 ? 2000 + parseInt(dateMatch[3]) : parseInt(dateMatch[3])) : new Date().getFullYear();
+                parsedDate = new Date(year, month, day);
+                title = title.replace(dateMatch[0], '').trim();
+            }
+
+            // Match 12h / 24h times like 3pm, 3:00 p.m., 15:00, or standalone numbers at end like "piano 3"
+            const timeMatch = title.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?\b/i);
+            if (timeMatch) {
+                let hour = parseInt(timeMatch[1]);
+                const min = timeMatch[2] ? parseInt(timeMatch[2]) : 0;
+                const meridiem = timeMatch[3] ? timeMatch[3].toLowerCase() : '';
+
+                if (meridiem.includes('p') && hour < 12) hour += 12;
+                if (meridiem.includes('a') && hour === 12) hour = 0;
+                if (!meridiem && hour <= 12 && title.toLowerCase().includes('pm')) hour = (hour === 12) ? 12 : hour + 12;
+
+                parsedDate.setHours(hour, min, 0, 0);
+                title = title.replace(timeMatch[0], '').trim();
+            }
+
+            if (!title) title = "New Glam Event";
+
+            const padMonth = String(parsedDate.getMonth() + 1).padStart(2, '0');
+            const padDay = String(parsedDate.getDate()).padStart(2, '0');
+            const padHour = String(parsedDate.getHours()).padStart(2, '0');
+            const padMin = String(parsedDate.getMinutes()).padStart(2, '0');
+            const datetimeISO = `${parsedDate.getFullYear()}-${padMonth}-${padDay}T${padHour}:${padMin}`;
+
             appData.events.unshift({
                 id: 'ev-' + Date.now(),
-                title: input,
-                datetime: new Date().toISOString().slice(0, 16),
+                title,
+                datetime: datetimeISO,
                 complexity: 2,
-                color: '#FF66A3'
+                color: '#FF66A3',
+                notes: ''
             });
 
             document.getElementById('smart-agenda-input').value = '';
@@ -1410,8 +1521,10 @@
             document.getElementById('edit-event-id').value = '';
             document.getElementById('event-title-input').value = '';
             document.getElementById('event-datetime-input').value = dt;
+            document.getElementById('event-enddate-input').value = '';
             document.getElementById('event-complexity-input').value = '2';
             document.getElementById('event-color-input').value = '#FF66A3';
+            document.getElementById('event-notes-input').value = '';
             document.getElementById('event-modal-title').textContent = "Add Task Block";
             document.getElementById('delete-event-btn').classList.add('hidden');
 
@@ -1426,22 +1539,25 @@
             const slotEvents = appData.events.filter(e => {
                 if (!e.datetime) return false;
                 const eDate = new Date(e.datetime);
-                return eDate.toISOString().slice(0, 10) === dateStr && eDate.getHours() === hour;
+                const eDateStr = formatDateKey(eDate);
+                return eDateStr === dateStr && eDate.getHours() === hour;
             });
 
             const list = document.getElementById('multi-slot-events-list');
             list.innerHTML = slotEvents.map(ev => `
-                <div class="p-3 rounded-xl border-2 border-[var(--pink-primary)] flex justify-between items-center bg-white">
-                    <div>
+                <div class="p-3.5 rounded-xl border-2 border-[var(--pink-primary)] flex flex-col gap-2 bg-white shadow-xs">
+                    <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full inline-block" style="background-color: ${ev.color || 'var(--pink-primary)'}"></span>
+                            <span class="w-3.5 h-3.5 rounded-full inline-block" style="background-color: ${ev.color || 'var(--pink-primary)'}"></span>
                             <h4 class="font-bold text-xs text-[var(--pink-dark)]">${ev.title}</h4>
                         </div>
-                        <p class="text-[10px] text-subtle mt-1">Level: ${ev.complexity || 1} ⭐</p>
+                        <button onclick="openEditEventModal('${ev.id}')" class="px-2.5 py-1 border border-pink-300 rounded text-xs font-bold hover:bg-pink-50">Edit</button>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="openEditEventModal('${ev.id}')" class="px-2.5 py-1 border rounded text-xs font-bold">Edit</button>
+                    <div class="flex justify-between text-[10px] text-subtle">
+                        <span>Time: ${new Date(ev.datetime).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                        <span>Level: ${ev.complexity || 1} ⭐</span>
                     </div>
+                    ${ev.notes ? `<p class="text-[11px] text-pink-800 bg-pink-50 p-2 rounded-md border border-pink-200">${ev.notes}</p>` : ''}
                 </div>
             `).join('');
 
@@ -1456,8 +1572,10 @@
             document.getElementById('edit-event-id').value = ev.id;
             document.getElementById('event-title-input').value = ev.title;
             document.getElementById('event-datetime-input').value = ev.datetime;
+            document.getElementById('event-enddate-input').value = ev.enddate || '';
             document.getElementById('event-complexity-input').value = ev.complexity || 1;
             document.getElementById('event-color-input').value = ev.color || '#FF66A3';
+            document.getElementById('event-notes-input').value = ev.notes || '';
             document.getElementById('event-modal-title').textContent = "Edit Task";
             document.getElementById('delete-event-btn').classList.remove('hidden');
 
@@ -1475,18 +1593,20 @@
             const id = document.getElementById('edit-event-id').value;
             const title = document.getElementById('event-title-input').value.trim();
             const datetime = document.getElementById('event-datetime-input').value;
+            const enddate = document.getElementById('event-enddate-input').value;
             const complexity = parseInt(document.getElementById('event-complexity-input').value) || 1;
             const color = document.getElementById('event-color-input').value;
+            const notes = document.getElementById('event-notes-input').value.trim();
 
             if (!title || !datetime) return alert("Please fill title and time!");
 
             if (id) {
                 const idx = appData.events.findIndex(e => e.id === id);
                 if (idx >= 0) {
-                    appData.events[idx] = { id, title, datetime, complexity, color };
+                    appData.events[idx] = { id, title, datetime, enddate, complexity, color, notes };
                 }
             } else {
-                appData.events.unshift({ id: 'ev-' + Date.now(), title, datetime, complexity, color });
+                appData.events.unshift({ id: 'ev-' + Date.now(), title, datetime, enddate, complexity, color, notes });
             }
 
             closeModal('edit-event-modal');
@@ -1595,7 +1715,7 @@
             saveToStorage();
         }
 
-        /* PET ROOM & CANVAS */
+        /* PET ROOM & CANVAS (WITH TRANSPARENCY & SMART PET CARE) */
         function renderPetStatusBars() {
             const s = appData.activePetStats;
             document.getElementById('stat-hunger-val').textContent = `${s.hunger}%`;
@@ -1630,6 +1750,9 @@
                 const cat = appData.masterCatalog.find(m => m.id === item.itemId);
                 if (!cat) return '';
 
+                const isPet = cat.type === 'pet';
+                const imgSizeClass = isPet ? 'w-28 h-28' : 'w-16 h-16';
+
                 return `
                     <div id="${item.instanceId}" 
                         onmousedown="startDragCanvasItem(event, '${item.instanceId}')"
@@ -1638,10 +1761,15 @@
                         style="left: ${item.x}px; top: ${item.y}px;">
                         
                         <div class="relative">
-                            <img src="${cat.img}" class="w-20 h-20 object-contain drop-shadow-md select-none pointer-events-none">
-                            <button onclick="removeItemFromCanvas('${item.instanceId}')" class="absolute -top-2 -right-2 bg-white rounded-full w-5 h-5 border border-pink-400 text-red-500 text-[10px] hidden group-hover:flex items-center justify-center shadow-md">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
+                            <img src="${cat.img}" class="${imgSizeClass} object-contain drop-shadow-md select-none pointer-events-none">
+                            <div class="absolute -top-3 -right-3 hidden group-hover:flex gap-1 bg-white/90 p-0.5 rounded-full border border-pink-300 shadow-md">
+                                <button onclick="returnPetToInventory('${item.instanceId}')" title="Return to Inventory" class="w-5 h-5 rounded-full bg-pink-100 hover:bg-pink-300 text-[var(--pink-dark)] text-[10px] flex items-center justify-center">
+                                    <i class="fa-solid fa-box-archive"></i>
+                                </button>
+                                <button onclick="permanentlyDeletePlacedItem('${item.instanceId}')" title="Delete Permanently" class="w-5 h-5 rounded-full bg-red-100 hover:bg-red-300 text-red-600 text-[10px] flex items-center justify-center">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1713,9 +1841,12 @@
                 const dx = Math.abs(dragged.x - petItem.x);
                 const dy = Math.abs(dragged.y - petItem.y);
 
-                if (dx < 80 && dy < 80) {
+                if (dx < 90 && dy < 90) {
                     const isFav = petCat.favItems && petCat.favItems.includes(dragged.itemId);
                     const mult = isFav ? 2 : 1;
+
+                    let triggeredMax = false;
+                    const prevStats = { ...appData.activePetStats };
 
                     if (draggedCat.boost) {
                         if (draggedCat.boost.hunger) appData.activePetStats.hunger = Math.min(100, appData.activePetStats.hunger + (draggedCat.boost.hunger * mult));
@@ -1723,6 +1854,17 @@
                         if (draggedCat.boost.hygiene) appData.activePetStats.hygiene = Math.min(100, appData.activePetStats.hygiene + (draggedCat.boost.hygiene * mult));
                         if (draggedCat.boost.health) appData.activePetStats.health = Math.min(100, appData.activePetStats.health + (draggedCat.boost.health * mult));
                     }
+
+                    if (isFav) {
+                        appData.activePetStats.happy = Math.min(100, appData.activePetStats.happy + 25);
+                    }
+
+                    // Reached 100% check for celebration
+                    ['hunger', 'happy', 'hygiene', 'health'].forEach(st => {
+                        if (prevStats[st] < 100 && appData.activePetStats[st] === 100) triggeredMax = true;
+                    });
+
+                    if (triggeredMax) triggerTaskConfetti();
 
                     showPetChatBubble(petItem.x, petItem.y);
                     appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== draggedId);
@@ -1740,14 +1882,31 @@
             const img = document.createElement('img');
             img.src = bubbleURL;
             img.className = 'pet-speech-bubble absolute w-16 h-16 pointer-events-none z-30';
-            img.style.left = `${x + 20}px`;
+            img.style.left = `${x + 30}px`;
             img.style.top = `${y - 50}px`;
 
             canvas.appendChild(img);
             setTimeout(() => img.remove(), 2500);
         }
 
-        function removeItemFromCanvas(instanceId) {
+        function returnPetToInventory(instanceId) {
+            const item = appData.placedCanvasItems.find(i => i.instanceId === instanceId);
+            if (!item) return;
+
+            const existing = appData.inventory.find(inv => inv.itemId === item.itemId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                appData.inventory.push({ itemId: item.itemId, qty: 1 });
+            }
+
+            appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== instanceId);
+            renderPetRoomCanvas();
+            updateCurrencyUI();
+            saveToStorage();
+        }
+
+        function permanentlyDeletePlacedItem(instanceId) {
             appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== instanceId);
             renderPetRoomCanvas();
             saveToStorage();
@@ -1755,6 +1914,20 @@
 
         function saveCustomBedroomBG() {
             const url = document.getElementById('custom-bg-url-input').value.trim();
+            const fileInput = document.getElementById('custom-bg-file-input');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.bedroomBG = e.target.result;
+                    closeModal('custom-bg-modal');
+                    renderPetRoomCanvas();
+                    saveToStorage();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+                return;
+            }
+
             if (url) {
                 appData.bedroomBG = url;
                 closeModal('custom-bg-modal');
@@ -1763,10 +1936,10 @@
             }
         }
 
-        /* BOUTIQUE & INVENTORY */
+        /* LA BOUTIQUE & STORE MANAGEMENT */
         function renderDailyShopCatalog() {
             const grid = document.getElementById('daily-shop-grid');
-            const categories = ['pet', 'food', 'toy', 'hygiene'];
+            const categories = ['pet', 'food', 'toy', 'hygiene', 'furniture'];
             const featuredItems = [];
 
             categories.forEach(cat => {
@@ -1776,19 +1949,19 @@
 
             grid.innerHTML = featuredItems.map(item => `
                 <div class="retro-box p-4 bg-white flex flex-col justify-between space-y-3">
-                    <div class="w-full h-36 rounded-xl overflow-hidden ${item.transparent ? 'bg-pink-100/40 flex items-center justify-center p-2' : 'bg-pink-50'} relative">
+                    <div class="w-full h-32 rounded-xl overflow-hidden ${item.transparent ? 'bg-pink-100/40 flex items-center justify-center p-2' : 'bg-pink-50'} relative">
                         <img src="${item.img}" class="${item.transparent ? 'max-h-full max-w-full object-contain' : 'w-full h-full object-cover'}">
                         <span class="absolute top-2 right-2 pixel-font text-[8px] bg-[var(--pink-accent)] text-white px-2 py-0.5 rounded uppercase">${item.type}</span>
                     </div>
                     <div>
-                        <h4 class="custom-title-font font-bold text-sm text-[var(--pink-dark)] flex items-center gap-1.5">
+                        <h4 class="custom-title-font font-bold text-xs text-[var(--pink-dark)] flex items-center gap-1">
                             <i class="${item.icon || 'fa-solid fa-gift'} text-accent-glam"></i> ${item.name}
                         </h4>
                         <p class="pixel-font text-[10px] text-accent-glam mt-1 flex items-center gap-1">
                             <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 object-contain"> ${item.price} Lovas
                         </p>
                     </div>
-                    <button onclick="buyBoutiqueItem('${item.id}', ${item.price})" class="retro-button w-full py-2 rounded-xl text-xs font-bold">
+                    <button onclick="buyBoutiqueItem('${item.id}', ${item.price})" class="retro-button w-full py-1.5 rounded-xl text-xs font-bold">
                         Buy Item
                     </button>
                 </div>
@@ -1864,8 +2037,35 @@
             saveToStorage();
         }
 
-        /* MASTER CATALOG EDITOR */
+        /* FULL STORE CATALOG MANAGER */
+        function openFullStoreCatalogModal() {
+            renderFullStoreCatalog();
+            openModal('full-store-catalog-modal');
+        }
+
+        function renderFullStoreCatalog() {
+            const list = document.getElementById('full-catalog-list');
+
+            list.innerHTML = appData.masterCatalog.map(item => `
+                <div class="p-3 border-2 border-[var(--pink-primary)] rounded-xl bg-white flex flex-col justify-between space-y-2 shadow-xs">
+                    <div class="w-full h-24 rounded-lg bg-pink-50 overflow-hidden flex items-center justify-center">
+                        <img src="${item.img}" class="max-h-full max-w-full object-contain">
+                    </div>
+                    <div>
+                        <span class="pixel-font text-[8px] bg-[var(--pink-accent)] text-white px-2 py-0.5 rounded uppercase">${item.type}</span>
+                        <h5 class="font-bold text-xs text-[var(--pink-dark)] mt-1">${item.name}</h5>
+                        <p class="pixel-font text-[9px] text-accent-glam mt-0.5">${item.price} Lovas</p>
+                    </div>
+                    <div class="flex gap-1 pt-1">
+                        <button onclick="openEditCatalogItemModal('${item.id}')" class="px-2 py-1 bg-pink-100 rounded text-[10px] font-bold text-[var(--pink-dark)] hover:bg-pink-200">Edit</button>
+                        <button onclick="deleteCatalogItemPermanently('${item.id}')" class="px-2 py-1 bg-red-100 rounded text-[10px] font-bold text-red-600 hover:bg-red-200">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function openAddNewCatalogItemForm() {
+            closeModal('full-store-catalog-modal');
             document.getElementById('edit-cat-item-id').value = '';
             document.getElementById('cat-name-input').value = '';
             document.getElementById('cat-price-input').value = '30';
@@ -1875,26 +2075,135 @@
             openModal('catalog-item-form-modal');
         }
 
+        function openEditCatalogItemModal(itemId) {
+            closeModal('full-store-catalog-modal');
+            const item = appData.masterCatalog.find(m => m.id === itemId);
+            if (!item) return;
+
+            document.getElementById('edit-cat-item-id').value = item.id;
+            document.getElementById('cat-name-input').value = item.name;
+            document.getElementById('cat-type-input').value = item.type;
+            document.getElementById('cat-price-input').value = item.price;
+            document.getElementById('cat-img-input').value = item.img;
+            document.getElementById('cat-transparent-input').checked = !!item.transparent;
+            document.getElementById('catalog-form-title').textContent = "Edit Catalog Item";
+            openModal('catalog-item-form-modal');
+        }
+
+        function handleCatalogFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('cat-img-input').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function applySmartPNGTransparency() {
+            const imgURL = document.getElementById('cat-img-input').value.trim();
+            if (!imgURL) return alert("Please specify an image URL or upload a file first!");
+
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
+
+                // Sample edge pixel color (top-left)
+                const bgR = data[0], bgG = data[1], bgB = data[2];
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i+1], b = data[i+2];
+                    if (Math.abs(r - bgR) < 35 && Math.abs(g - bgG) < 35 && Math.abs(b - bgB) < 35) {
+                        data[i+3] = 0; // set alpha transparent
+                    }
+                }
+
+                ctx.putImageData(imgData, 0, 0);
+                document.getElementById('cat-img-input').value = canvas.toDataURL('image/png');
+                document.getElementById('cat-transparent-input').checked = true;
+            };
+            img.src = imgURL;
+        }
+
+        function applyColorKeyTransparency() {
+            const imgURL = document.getElementById('cat-img-input').value.trim();
+            const hexColor = document.getElementById('key-color-picker').value;
+            if (!imgURL) return alert("Please specify an image URL first!");
+
+            const keyR = parseInt(hexColor.slice(1,3), 16);
+            const keyG = parseInt(hexColor.slice(3,5), 16);
+            const keyB = parseInt(hexColor.slice(5,7), 16);
+
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i+1], b = data[i+2];
+                    if (Math.abs(r - keyR) < 40 && Math.abs(g - keyG) < 40 && Math.abs(b - keyB) < 40) {
+                        data[i+3] = 0;
+                    }
+                }
+
+                ctx.putImageData(imgData, 0, 0);
+                document.getElementById('cat-img-input').value = canvas.toDataURL('image/png');
+                document.getElementById('cat-transparent-input').checked = true;
+            };
+            img.src = imgURL;
+        }
+
         function saveCatalogItem() {
+            const id = document.getElementById('edit-cat-item-id').value;
             const name = document.getElementById('cat-name-input').value.trim();
             const type = document.getElementById('cat-type-input').value;
             const price = parseInt(document.getElementById('cat-price-input').value) || 20;
             const img = document.getElementById('cat-img-input').value.trim();
             const transparent = document.getElementById('cat-transparent-input').checked;
 
-            if (!name || !img) return alert("Please enter item name and image URL!");
+            if (!name || !img) return alert("Please enter item name and image!");
 
-            appData.masterCatalog.unshift({
-                id: 'cat-custom-' + Date.now(),
-                name,
-                type,
-                price,
-                img,
-                transparent,
-                icon: type === 'pet' ? 'fa-paw' : (type === 'food' ? 'fa-utensils' : 'fa-gift')
-            });
+            if (id) {
+                const idx = appData.masterCatalog.findIndex(m => m.id === id);
+                if (idx >= 0) {
+                    appData.masterCatalog[idx] = { ...appData.masterCatalog[idx], name, type, price, img, transparent };
+                }
+            } else {
+                appData.masterCatalog.push({
+                    id: 'cat-custom-' + Date.now(),
+                    name,
+                    type,
+                    price,
+                    img,
+                    transparent,
+                    icon: type === 'pet' ? 'fa-paw' : (type === 'food' ? 'fa-utensils' : 'fa-gift')
+                });
+            }
 
             closeModal('catalog-item-form-modal');
+            renderDailyShopCatalog();
+            saveToStorage();
+        }
+
+        function deleteCatalogItemPermanently(itemId) {
+            appData.masterCatalog = appData.masterCatalog.filter(m => m.id !== itemId);
+            renderFullStoreCatalog();
             renderDailyShopCatalog();
             saveToStorage();
         }
