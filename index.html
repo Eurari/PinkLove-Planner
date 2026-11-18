@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粉爱 | Pink Glam & Pet Room Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #fff0f5;
+    --primary-color: #ff69b4;
+    --secondary-color: #ff1493;
+    --title-color: #c71585;
+    --decal-color: #ffb6c1;
+    --accent-pink: #db7093;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Cormorant Garamond', serif;
+    --bg-pattern: polka;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background-color: var(--bg-color);
+    font-family: var(--font-body);
+    color: var(--secondary-color);
+    min-height: 100vh;
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+
+  body.bg-polka {
+    background-image: radial-gradient(var(--decal-color) 15%, transparent 16%), radial-gradient(var(--decal-color) 15%, transparent 16%);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+  }
+  body.bg-hearts {
+    background-image: radial-gradient(circle, var(--decal-color) 20%, transparent 20%), radial-gradient(circle, var(--decal-color) 20%, transparent 20%);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+  }
+  body.bg-solid { background-image: none; }
+  body.bg-lace {
+    background-image: repeating-linear-gradient(45deg, var(--decal-color) 0, var(--decal-color) 1px, transparent 0, transparent 50%);
+    background-size: 16px 16px;
+  }
+
+  /* Header Branding */
+  .header-container {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .header-logo-decal {
+    display: block;
+    margin: 0 auto 10px auto;
+    max-width: 320px;
+    height: auto;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  .app-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--title-color);
+    text-shadow: 2px 2px 0px var(--decal-color);
+    letter-spacing: 2px;
+  }
+  .app-subtitle {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+    font-weight: 600;
+  }
+  
+  .currency-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 2px dashed var(--primary-color);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-top: 12px;
+    font-weight: bold;
+    color: var(--title-color);
+    box-shadow: 2px 2px 10px rgba(255, 105, 180, 0.2);
+  }
+  .currency-icon { width: 17px; height: 14px; vertical-align: middle; }
+
+  /* Tab Navigation */
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: #ffffff;
+    border: 2px solid var(--primary-color);
+    color: var(--secondary-color);
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+    box-shadow: 2px 2px 0px var(--decal-color);
+  }
+  .tab-btn.active {
+    background: var(--primary-color);
+    color: #ffffff;
+    box-shadow: none;
+    transform: translateY(2px);
+  }
+
+  /* Content Cards */
+  .tab-content { display: none; max-width: 1050px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+  .card {
+    background: #ffffff;
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0px var(--decal-color);
+    position: relative;
+  }
+  .card-title {
+    font-family: var(--font-heading);
+    color: var(--title-color);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  /* Quote Display (Refined layout) */
+  .quote-container {
+    position: relative;
+    padding: 25px;
+    text-align: center;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .quote-text {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--title-color);
+    margin-bottom: 8px;
+  }
+  .quote-author {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+  }
+  .quote-edit-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .quote-edit-btn:hover { opacity: 1.0; }
+
+  .compact-btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .btn-sm {
+    padding: 5px 12px;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    background: var(--decal-color);
+    color: var(--title-color);
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn-sm:hover { background: var(--primary-color); color: #fff; }
+
+  /* Pins / Moodboard */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+  }
+  .mood-pin {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid #fff;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Rating Icons */
+  .rating-icon {
+    width: 15px;
+    height: 12px;
+    display: inline-block;
+  }
+
+  /* Agenda Grid */
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    gap: 2px;
+    background: var(--decal-color);
+    border: 1px solid var(--primary-color);
+    overflow-x: auto;
+  }
+  .agenda-cell {
+    background: #fff;
+    min-height: 40px;
+    padding: 4px;
+    font-size: 0.8rem;
+    position: relative;
+  }
+  .agenda-header {
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+  }
+  .event-block {
+    background: var(--decal-color);
+    color: var(--title-color);
+    border-left: 3px solid var(--secondary-color);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    font-size: 0.75rem;
+  }
+
+  /* Habit Tracker */
+  .habit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--decal-color);
+  }
+  .habit-days { display: flex; gap: 6px; }
+  .day-box {
+    width: 26px; height: 26px;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .day-box.checked {
+    background: var(--primary-color);
+    color: #fff;
+  }
+
+  /* Pet Room & Boutique */
+  .pet-room-viewport {
+    width: 100%;
+    height: 380px;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid var(--primary-color);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .draggable-pet-item {
+    position: absolute;
+    cursor: move;
+    user-select: none;
+    max-width: 100px;
+    max-height: 100px;
+  }
+  .pet-status-bar {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--decal-color);
+  }
+  .status-metric { flex: 1; text-align: center; font-weight: bold; }
+  
+  .boutique-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+  }
+  .boutique-card {
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    background: #fff;
+  }
+  .boutique-img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
+
+  /* Floating Confetti */
+  .confetti-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: dropScatter 1.8s ease-out forwards;
+  }
+  @keyframes dropScatter {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
+  }
+
+  /* Speech bubble popup */
+  .speech-bubble {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 4px;
+    display: none;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  }
+
+  /* Form Elements & Inputs */
+  input, select, button {
+    font-family: inherit;
+    color: var(--secondary-color);
+  }
+  .styled-input {
+    padding: 8px 12px;
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    outline: none;
+  }
+  .styled-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body class="bg-polka">
+
+<div class="header-container">
+  <img src="https://dl6.glitter-graphics.net/pub/532/532236fo1y55rfbl.gif" class="header-logo-decal" alt="glitter logo">
+  <h1 class="app-title">粉爱</h1>
+  <div class="app-subtitle">pink glam and pet room</div>
+  <div class="currency-badge">
+    <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="currency-icon" alt="lovas decal">
+    <span id="lovas-balance">150</span> Lovas
+  </div>
+</div>
+
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('tab-mood')">Mood & Quotes</button>
+  <button class="tab-btn" onclick="switchTab('tab-hotlist')">Hot List</button>
+  <button class="tab-btn" onclick="switchTab('tab-agenda')">Agenda</button>
+  <button class="tab-btn" onclick="switchTab('tab-habits')">Habits</button>
+  <button class="tab-btn" onclick="switchTab('tab-shop')">Pet Room & Shop</button>
+</nav>
+
+<!-- TAB 1: MOOD & QUOTES -->
+<div id="tab-mood" class="tab-content active">
+  <div class="card">
+    <!-- Quote Display Box (Refined, no smaller inner mantra frame) -->
+    <div class="quote-container" id="quote-display-box">
+      <div class="quote-text" id="quote-text">"Elegance is refusal."</div>
+      <div class="quote-author" id="quote-author">— Coco Chanel</div>
+      <button class="quote-edit-btn" onclick="openQuoteEditModal()" title="Edit Quotes Bank">✏️</button>
+    </div>
+
+    <div class="compact-btn-row">
+      <button class="btn-sm" onclick="shuffleQuote()">Shuffle Quote</button>
+      <button class="btn-sm" onclick="promptAddQuote()">+ Add Quote</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Inspiration Pinboard</h2>
+    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+      <button class="btn-sm" onclick="shufflePins()">Shuffle Pins</button>
+      <button class="btn-sm" onclick="promptAddPin()">+ Add Pin URL</button>
+      <label style="font-size: 0.85rem;">Cycle Speed: 
+        <select id="pin-speed" onchange="updatePinCycleSpeed()" style="padding: 2px 6px;">
+          <option value="3000">3s</option>
+          <option value="5000" selected>5s</option>
+          <option value="8000">8s</option>
+        </select>
+      </label>
+    </div>
+    <div class="mood-grid" id="mood-grid">
+      <!-- 3 active pin slots -->
+    </div>
+  </div>
+
+  <!-- Global Theme & Background Customizer -->
+  <div class="card">
+    <h2 class="card-title">Global Aesthetics & Customizer</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+      <label>Primary Theme Color
+        <input type="color" id="picker-primary" value="#ff69b4" onchange="updateGlobalTheme()" style="width:100%; height:35px; border:none; cursor:pointer;">
+      </label>
+      <label>Secondary / Text Color
+        <input type="color" id="picker-secondary" value="#ff1493" onchange="updateGlobalTheme()" style="width:100%; height:35px; border:none; cursor:pointer;">
+      </label>
+      <label>Title Color
+        <input type="color" id="picker-title" value="#c71585" onchange="updateGlobalTheme()" style="width:100%; height:35px; border:none; cursor:pointer;">
+      </label>
+      <label>Decal / Shadow Accent
+        <input type="color" id="picker-decal" value="#ffb6c1" onchange="updateGlobalTheme()" style="width:100%; height:35px; border:none; cursor:pointer;">
+      </label>
+      <label>Background Pattern
+        <select id="picker-bg" onchange="updateGlobalTheme()" class="styled-input" style="width:100%; margin-top:4px;">
+          <option value="polka">Pink Polka Dots</option>
+          <option value="hearts">Soft Hearts</option>
+          <option value="lace">Vintage Lace Grid</option>
+          <option value="solid">Solid Soft Pink</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: HOT LIST -->
+<div id="tab-hotlist" class="tab-content">
+  <div class="card">
+    <h2 class="card-title">Hot List & Timelines</h2>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+      <input type="text" id="hot-task-input" placeholder="Task Title" class="styled-input" style="flex:1;">
+      <input type="date" id="hot-date-input" class="styled-input">
+      <select id="hot-complexity" class="styled-input">
+        <option value="1">1 Lovas ⭐</option>
+        <option value="2">2 Lovas ⭐⭐</option>
+        <option value="3">3 Lovas ⭐⭐⭐</option>
+        <option value="4">4 Lovas ⭐⭐⭐⭐</option>
+        <option value="5">5 Lovas ⭐⭐⭐⭐⭐</option>
+      </select>
+      <button class="styled-btn" onclick="addHotTask()">Add to Hot List</button>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <span style="font-weight:bold; margin-right:8px;">Filter:</span>
+      <button class="btn-sm" onclick="filterHotList('all')">All</button>
+      <button class="btn-sm" onclick="filterHotList('week')">This Week</button>
+      <button class="btn-sm" onclick="filterHotList('month')">This Month</button>
+    </div>
+    <div id="hotlist-container"></div>
+  </div>
+</div>
+
+<!-- TAB 3: AGENDA -->
+<div id="tab-agenda" class="tab-content">
+  <div class="card">
+    <h2 class="card-title">24-Hour Weekly Agenda</h2>
+    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+      <input type="text" id="agenda-title" placeholder="Event Name (e.g., Piano)" class="styled-input" style="flex:1;">
+      <select id="agenda-day" class="styled-input">
+        <option value="0">Sun</option><option value="1">Mon</option><option value="2">Tue</option>
+        <option value="3">Wed</option><option value="4">Thu</option><option value="5">Fri</option><option value="6">Sat</option>
+      </select>
+      <input type="number" id="agenda-hour" min="0" max="23" placeholder="Hour (0-23)" class="styled-input" style="width:110px;">
+      <select id="agenda-complexity" class="styled-input">
+        <option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option>
+      </select>
+      <button class="styled-btn" onclick="addAgendaEvent()">Add Event</button>
+    </div>
+    <div class="agenda-grid" id="agenda-grid"></div>
+  </div>
+</div>
+
+<!-- TAB 4: HABITS -->
+<div id="tab-habits" class="tab-content">
+  <div class="card">
+    <h2 class="card-title">Weekly Habit Rituals</h2>
+    <div style="font-size: 0.9rem; margin-bottom: 15px;">Checkboxes auto-reset on new calendar weeks</div>
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+      <input type="text" id="habit-name-input" placeholder="New Habit Name..." class="styled-input" style="flex:1;">
+      <select id="habit-complexity" class="styled-input">
+        <option value="1">1 Lovas ⭐</option><option value="2">2 Lovas ⭐⭐</option>
+        <option value="3">3 Lovas ⭐⭐⭐</option><option value="4">4 Lovas ⭐⭐⭐⭐</option><option value="5">5 Lovas ⭐⭐⭐⭐⭐</option>
+      </select>
+      <button class="styled-btn" onclick="addHabit()">Add Ritual</button>
+    </div>
+    <div id="habits-list"></div>
+  </div>
+</div>
+
+<!-- TAB 5: PET ROOM & SHOP -->
+<div id="tab-shop" class="tab-content">
+  <div class="card">
+    <h2 class="card-title">The Pet Boudoir</h2>
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+      <input type="text" id="bg-url-input" placeholder="Custom Wallpaper Background Image URL..." class="styled-input" style="flex:1;">
+      <button class="styled-btn" onclick="applyCustomBg()">Set Background</button>
+    </div>
+    <div class="pet-room-viewport" id="pet-room-viewport" style="background-image: url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80');">
+      <div id="pet-element" class="draggable-pet-item" style="top: 180px; left: 200px;">
+        <div class="speech-bubble" id="speech-bubble">
+          <img src="https://dl5.glitter-graphics.net/pub/3783/3783195yt1z9msh3d.gif" alt="heart bubble" style="width:40px; height:auto;">
+        </div>
+        <img id="pet-img" src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=200&q=80" style="width:80px; height:auto;" alt="pet">
+      </div>
+    </div>
+
+    <div class="pet-status-bar">
+      <div class="status-metric">Hunger: <span id="val-hunger">80</span>%</div>
+      <div class="status-metric">Happiness: <span id="val-happy">90</span>%</div>
+      <div class="status-metric">Hygiene: <span id="val-hygiene">85</span>%</div>
+      <div class="status-metric">Health: <span id="val-health">100</span>%</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Daily Boutique (Rotating Catalog)</h2>
+    <div class="boutique-grid" id="boutique-grid"></div>
+  </div>
+</div>
+
+<script>
+  // App Data & State
+  let appData = {
+    lovas: 150,
+    quotes: [
+      { text: "Elegance is refusal.", author: "Coco Chanel" },
+      { text: "Pour yourself a drink, put on some lipstick, and pull yourself together.", author: "Elizabeth Taylor" },
+      { text: "Pink is not just a color, it's an attitude.", author: "Miley Cyrus" }
+    ],
+    pins: [
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=400&q=80"
+    ],
+    hotTasks: [],
+    agendaEvents: [],
+    habits: [
+      { id: 1, name: "Morning Skincare Routine", complexity: 2, days: [false, false, false, false, false, false, false] }
+    ],
+    petStats: { hunger: 80, happy: 90, hygiene: 85, health: 100 },
+    theme: {
+      primary: '#ff69b4',
+      secondary: '#ff1493',
+      title: '#c71585',
+      decal: '#ffb6c1',
+      bgPattern: 'polka'
+    }
+  };
+
+  let currentQuoteIndex = 0;
+  let pinCycleTimer = null;
+
+  // Initialize
+  window.addEventListener('load', () => {
+    loadSavedData();
+    renderQuote();
+    renderPins();
+    startPinCycle(5000);
+    renderHotList();
+    renderAgenda();
+    renderHabits();
+    renderBoutique();
+    setupPetDragging();
+    applyThemeToDOM();
+  });
+
+  function saveAll() {
+    localStorage.setItem('pink_glam_planner_data', JSON.stringify(appData));
+  }
+
+  function loadSavedData() {
+    const saved = localStorage.getItem('pink_glam_planner_data');
+    if (saved) {
+      try { appData = JSON.parse(saved); } catch(e){}
+    }
+    document.getElementById('lovas-balance').innerText = appData.lovas;
+  }
+
+  function triggerConfetti() {
+    for (let i = 0; i < 12; i++) {
+      const p = document.createElement('img');
+      p.src = "https://dl7.glitter-graphics.net/pub/536/536397dgj9ef6ron.gif";
+      p.className = 'confetti-particle';
+      p.style.left = (Math.random() * window.innerWidth) + 'px';
+      p.style.top = (window.scrollY + Math.random() * 200) + 'px';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1800);
+    }
+  }
+
+  function addLovas(amount) {
+    appData.lovas += parseInt(amount);
+    document.getElementById('lovas-balance').innerText = appData.lovas;
+    triggerConfetti();
+    saveAll();
+  }
+
+  function renderComplexityIcons(count) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `<img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="rating-icon" alt="star">`;
+    }
+    return html;
+  }
+
+  // Navigation
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Quotes
+  function renderQuote() {
+    if(!appData.quotes.length) return;
+    const q = appData.quotes[currentQuoteIndex % appData.quotes.length];
+    document.getElementById('quote-text').innerText = `"${q.text}"`;
+    document.getElementById('quote-author').innerText = `— ${q.author}`;
+  }
+
+  function shuffleQuote() {
+    currentQuoteIndex = Math.floor(Math.random() * appData.quotes.length);
+    renderQuote();
+  }
+
+  function promptAddQuote() {
+    const text = prompt("Enter quote text:");
+    if (!text) return;
+    const author = prompt("Enter author:") || "Anonymous";
+    appData.quotes.push({ text, author });
+    currentQuoteIndex = appData.quotes.length - 1;
+    renderQuote();
+    saveAll();
+  }
+
+  function openQuoteEditModal() {
+    let quoteListStr = appData.quotes.map((q, i) => `${i+1}. ${q.text} (${q.author})`).join("\n");
+    let delIdx = prompt("Current Quotes:\n" + quoteListStr + "\n\nEnter number of quote to delete (or press Cancel to keep):");
+    if(delIdx) {
+      let idx = parseInt(delIdx) - 1;
+      if(idx >= 0 && idx < appData.quotes.length) {
+        appData.quotes.splice(idx, 1);
+        renderQuote();
+        saveAll();
+      }
+    }
+  }
+
+  // Pins / Pinboard
+  function renderPins() {
+    const container = document.getElementById('mood-grid');
+    container.innerHTML = '';
+    const activeThree = appData.pins.slice(0, 3);
+    activeThree.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.className = 'mood-pin';
+      container.appendChild(img);
+    });
+  }
+
+  function shufflePins() {
+    appData.pins.sort(() => Math.random() - 0.5);
+    renderPins();
+  }
+
+  function promptAddPin() {
+    const url = prompt("Enter Image URL for new pin:");
+    if(url) {
+      appData.pins.unshift(url);
+      renderPins();
+      saveAll();
+    }
+  }
+
+  function startPinCycle(ms) {
+    if(pinCycleTimer) clearInterval(pinCycleTimer);
+    pinCycleTimer = setInterval(shufflePins, ms);
+  }
+
+  function updatePinCycleSpeed() {
+    const val = parseInt(document.getElementById('pin-speed').value);
+    startPinCycle(val);
+  }
+
+  // Global Aesthetics
+  function updateGlobalTheme() {
+    appData.theme.primary = document.getElementById('picker-primary').value;
+    appData.theme.secondary = document.getElementById('picker-secondary').value;
+    appData.theme.title = document.getElementById('picker-title').value;
+    appData.theme.decal = document.getElementById('picker-decal').value;
+    appData.theme.bgPattern = document.getElementById('picker-bg').value;
+    applyThemeToDOM();
+    saveAll();
+  }
+
+  function applyThemeToDOM() {
+    const r = document.documentElement;
+    r.style.setProperty('--primary-color', appData.theme.primary);
+    r.style.setProperty('--secondary-color', appData.theme.secondary);
+    r.style.setProperty('--title-color', appData.theme.title);
+    r.style.setProperty('--decal-color', appData.theme.decal);
+    
+    document.body.className = '';
+    document.body.classList.add('bg-' + appData.theme.bgPattern);
+
+    document.getElementById('picker-primary').value = appData.theme.primary;
+    document.getElementById('picker-secondary').value = appData.theme.secondary;
+    document.getElementById('picker-title').value = appData.theme.title;
+    document.getElementById('picker-decal').value = appData.theme.decal;
+    document.getElementById('picker-bg').value = appData.theme.bgPattern;
+  }
+
+  // Hot List
+  function addHotTask() {
+    const title = document.getElementById('hot-task-input').value;
+    const date = document.getElementById('hot-date-input').value;
+    const complexity = parseInt(document.getElementById('hot-complexity').value);
+    if (!title) return;
+
+    appData.hotTasks.push({ id: Date.now(), title, date, complexity, done: false });
+    document.getElementById('hot-task-input').value = '';
+    renderHotList();
+    saveAll();
+  }
+
+  function filterHotList(type) {
+    renderHotList(type);
+  }
+
+  function renderHotList(filter = 'all') {
+    const container = document.getElementById('hotlist-container');
+    container.innerHTML = '';
+    
+    let filtered = appData.hotTasks;
+    if (filter === 'week') {
+      filtered = filtered.filter(t => t.date); // Simplified week window logic
+    }
+
+    filtered.forEach(t => {
+      const item = document.createElement('div');
+      item.className = 'habit-row';
+      item.innerHTML = `
+        <div>
+          <strong>${t.title}</strong> <span style="font-size:0.8rem;">(${t.date || 'No Date'})</span>
+          <div>${renderComplexityIcons(t.complexity)}</div>
+        </div>
+        <button class="btn-sm" onclick="completeHotTask(${t.id})">${t.done ? 'Done ✓' : 'Complete'}</button>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function completeHotTask(id) {
+    const t = appData.hotTasks.find(x => x.id === id);
+    if (t && !t.done) {
+      t.done = true;
+      addLovas(t.complexity);
+      renderHotList();
+    }
+  }
+
+  // Agenda
+  function renderAgenda() {
+    const grid = document.getElementById('agenda-grid');
+    grid.innerHTML = '';
+    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    grid.appendChild(document.createElement('div'));
+    days.forEach(d => {
+      const h = document.createElement('div');
+      h.className = 'agenda-header';
+      h.innerText = d;
+      grid.appendChild(h);
+    });
+
+    for(let hour = 0; hour < 24; hour++) {
+      const timeLbl = document.createElement('div');
+      timeLbl.className = 'agenda-cell';
+      timeLbl.style.fontWeight = 'bold';
+      timeLbl.innerText = `${hour}:00`;
+      grid.appendChild(timeLbl);
+
+      for(let day = 0; day < 7; day++) {
+        const cell = document.createElement('div');
+        cell.className = 'agenda-cell';
+        
+        const events = appData.agendaEvents.filter(e => e.day == day && e.hour == hour);
+        events.forEach(ev => {
+          const eb = document.createElement('div');
+          eb.className = 'event-block';
+          eb.innerHTML = `${ev.title} ${renderComplexityIcons(ev.complexity)}`;
+          eb.onclick = () => { addLovas(ev.complexity); };
+          cell.appendChild(eb);
+        });
+
+        grid.appendChild(cell);
+      }
+    }
+  }
+
+  function addAgendaEvent() {
+    const title = document.getElementById('agenda-title').value;
+    const day = document.getElementById('agenda-day').value;
+    const hour = document.getElementById('agenda-hour').value;
+    const complexity = parseInt(document.getElementById('agenda-complexity').value);
+    if (!title || hour === '') return;
+
+    appData.agendaEvents.push({ id: Date.now(), title, day, hour, complexity });
+    renderAgenda();
+    saveAll();
+  }
+
+  // Habits
+  function renderHabits() {
+    const container = document.getElementById('habits-list');
+    container.innerHTML = '';
+
+    appData.habits.forEach(h => {
+      const row = document.createElement('div');
+      row.className = 'habit-row';
+      
+      let daysHtml = '';
+      h.days.forEach((checked, dIdx) => {
+        daysHtml += `<div class="day-box ${checked ? 'checked' : ''}" onclick="toggleHabitDay(${h.id}, ${dIdx})">${['S','M','T','W','T','F','S'][dIdx]}</div>`;
+      });
+
+      row.innerHTML = `
+        <div>
+          <strong>${h.name}</strong> ✏️ 
+          <div>${renderComplexityIcons(h.complexity)}</div>
+        </div>
+        <div class="habit-days">${daysHtml}</div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function addHabit() {
+    const name = document.getElementById('habit-name-input').value;
+    const complexity = parseInt(document.getElementById('habit-complexity').value);
+    if (!name) return;
+
+    appData.habits.push({ id: Date.now(), name, complexity, days: [false, false, false, false, false, false, false] });
+    document.getElementById('habit-name-input').value = '';
+    renderHabits();
+    saveAll();
+  }
+
+  function toggleHabitDay(id, dayIdx) {
+    const h = appData.habits.find(x => x.id === id);
+    if(h) {
+      h.days[dayIdx] = !h.days[dayIdx];
+      if (h.days[dayIdx]) addLovas(h.complexity);
+      renderHabits();
+      saveAll();
+    }
+  }
+
+  // Pet & Boutique
+  function renderBoutique() {
+    const grid = document.getElementById('boutique-grid');
+    grid.innerHTML = '';
+    
+    const catalog = [
+      { name: 'Macaron Treat', type: 'food', cost: 10, img: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?auto=format&fit=crop&w=150&q=80' },
+      { name: 'Glitter Ball', type: 'toy', cost: 15, img: 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=150&q=80' },
+      { name: 'Bubble Bath', type: 'hygiene', cost: 20, img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=150&q=80' },
+      { name: 'Health Tonic', type: 'medicine', cost: 25, img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=150&q=80' }
+    ];
+
+    catalog.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'boutique-card';
+      card.innerHTML = `
+        <img src="${item.img}" class="boutique-img" alt="${item.name}">
+        <div><strong>${item.name}</strong></div>
+        <div>${item.cost} Lovas</div>
+        <button class="btn-sm" style="margin-top:5px;" onclick="buyItem(${item.cost}, '${item.type}')">Buy & Use</button>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function buyItem(cost, type) {
+    if (appData.lovas >= cost) {
+      appData.lovas -= cost;
+      document.getElementById('lovas-balance').innerText = appData.lovas;
+
+      if(type === 'food') appData.petStats.hunger = Math.min(100, appData.petStats.hunger + 20);
+      if(type === 'toy') appData.petStats.happy = Math.min(100, appData.petStats.happy + 20);
+      if(type === 'hygiene') appData.petStats.hygiene = Math.min(100, appData.petStats.hygiene + 20);
+      if(type === 'medicine') appData.petStats.health = Math.min(100, appData.petStats.health + 20);
+
+      updatePetMeters();
+      showHeartBubble();
+      saveAll();
+    } else {
+      alert("Not enough Lovas!");
+    }
+  }
+
+  function updatePetMeters() {
+    document.getElementById('val-hunger').innerText = appData.petStats.hunger;
+    document.getElementById('val-happy').innerText = appData.petStats.happy;
+    document.getElementById('val-hygiene').innerText = appData.petStats.hygiene;
+    document.getElementById('val-health').innerText = appData.petStats.health;
+  }
+
+  function showHeartBubble() {
+    const bubble = document.getElementById('speech-bubble');
+    bubble.style.display = 'block';
+    setTimeout(() => { bubble.style.display = 'none'; }, 2500);
+  }
+
+  function applyCustomBg() {
+    const url = document.getElementById('bg-url-input').value;
+    if(url) {
+      document.getElementById('pet-room-viewport').style.backgroundImage = `url('${url}')`;
+    }
+  }
+
+  function setupPetDragging() {
+    const pet = document.getElementById('pet-element');
+    let isDragging = false, offset = [0,0];
+
+    pet.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offset = [pet.offsetLeft - e.clientX, pet.offsetTop - e.clientY];
+    });
+
+    document.addEventListener('mouseup', () => isDragging = false);
+    document.addEventListener('mousemove', (e) => {
+      if(isDragging) {
+        pet.style.left = (e.clientX + offset[0]) + 'px';
+        pet.style.top = (e.clientY + offset[1]) + 'px';
+      }
+    });
+  }
+</script>
+</body>
+</html>
