@@ -149,11 +149,9 @@
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-4 border-[var(--pink-primary)] shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4">
             
-            <!-- Brand Logo with Custom GIF & Text Update -->
+            <!-- Brand Logo with Clean Decal (No Box/Border) -->
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-2xl bg-[var(--pink-secondary)] border-2 border-[var(--pink-dark)] flex items-center justify-center shadow-md overflow-hidden p-1">
-                    <img src="https://dl6.glitter-graphics.net/pub/532/532236fo1y55rfbl.gif" class="w-full h-full object-contain" alt="Glitter Logo">
-                </div>
+                <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-8 h-7 object-contain drop-shadow-sm" alt="Glitter Decal Logo">
                 <div>
                     <h1 class="custom-title-font text-2xl sm:text-3xl font-bold text-[var(--pink-dark)] leading-none">粉爱</h1>
                     <p class="pixel-font text-[9px] text-accent-glam tracking-widest mt-1 uppercase">PINK GLAM & PET ROOM</p>
@@ -199,34 +197,31 @@
         <!-- ================= TAB 1: MOOD & QUOTES (LANDING PAGE) ================= -->
         <section id="page-landing" class="tab-page space-y-8">
             
-            <!-- Hero Mantra Box with Refined Smaller Action Buttons & Bottom Right Pen Edit Icon -->
-            <div class="retro-box p-6 sm:p-8 text-center relative overflow-hidden bg-white">
-                <div class="relative z-10 max-w-2xl mx-auto space-y-3">
-                    <span class="inline-block px-3 py-1 rounded-full bg-[var(--pink-secondary)] text-[var(--pink-dark)] text-xs font-bold border border-[var(--pink-primary)]">
-                        ✨ Daily Mantra ✨
-                    </span>
-                    <div id="spotlight-quote-box" class="min-h-[100px] flex flex-col justify-center items-center relative px-6 py-2">
-                        <h3 id="spotlight-quote-text" class="custom-title-font italic text-xl sm:text-2xl font-semibold text-[var(--pink-dark)]">
+            <!-- Hero Mantra Box (Daily Mantra badge removed, edit pen moved to bottom-right, buttons compacted) -->
+            <div class="retro-box p-5 sm:p-6 text-center relative overflow-hidden bg-white">
+                <div class="relative z-10 max-w-2xl mx-auto space-y-2">
+                    <div id="spotlight-quote-box" class="min-h-[90px] flex flex-col justify-center items-center relative px-6 py-1">
+                        <h3 id="spotlight-quote-text" class="custom-title-font italic text-lg sm:text-xl font-semibold text-[var(--pink-dark)]">
                             "Pour yourself a drink, put on some lipstick, and pull yourself together."
                         </h3>
-                        <p id="spotlight-quote-author" class="pixel-font text-[11px] text-accent-glam mt-2">
+                        <p id="spotlight-quote-author" class="pixel-font text-[10px] text-accent-glam mt-1.5">
                             — Elizabeth Taylor
                         </p>
                         
-                        <!-- Pen Edit Button placed neatly in bottom right corner -->
+                        <!-- Pen Edit Button placed closer to absolute bottom right corner -->
                         <button onclick="editCurrentSpotlightQuote()" title="Edit Spotlight Quote" 
-                            class="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-pink-100 hover:bg-[var(--pink-primary)] hover:text-white border border-[var(--pink-primary)] text-[var(--pink-dark)] transition flex items-center justify-center text-[10px]">
+                            class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-pink-100 hover:bg-[var(--pink-primary)] hover:text-white border border-[var(--pink-primary)] text-[var(--pink-dark)] transition flex items-center justify-center text-[9px] shadow-xs">
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </div>
                     
                     <!-- Compact Buttons -->
-                    <div class="flex flex-wrap justify-center gap-2 pt-1">
-                        <button onclick="generateRandomQuote()" class="retro-button px-3.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1">
-                            <i class="fa-solid fa-dice text-[10px]"></i> Shuffle Mantra
+                    <div class="flex flex-wrap justify-center gap-1.5 pt-1">
+                        <button onclick="generateRandomQuote()" class="retro-button px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-dice text-[9px]"></i> Shuffle Mantra
                         </button>
-                        <button onclick="openModal('add-quote-modal')" class="bg-white text-[var(--pink-dark)] border border-[var(--pink-primary)] px-3.5 py-1.5 rounded-lg text-[11px] font-bold hover:bg-pink-50 transition flex items-center gap-1">
-                            <i class="fa-solid fa-plus text-[10px]"></i> Add New Quote
+                        <button onclick="openModal('add-quote-modal')" class="bg-white text-[var(--pink-dark)] border border-[var(--pink-primary)] px-2.5 py-1 rounded-md text-[10px] font-bold hover:bg-pink-50 transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus text-[9px]"></i> Add Quote
                         </button>
                     </div>
                 </div>
@@ -551,28 +546,28 @@
     <div id="backpack-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-xl w-full p-6 bg-white space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)] flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping text-accent-glam"></i> Inventory Backpack
-                </h3>
-                <button onclick="toggleBackpackModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <p class="text-xs text-subtle">Click <b>"Place in Room"</b> to send an item to the bedroom canvas, where you can drag it around or onto pets!</p>
-
-            <div id="inventory-items-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto p-1 flex-grow">
-                <!-- Populated via JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Theme Customization Modal -->
+    <!-- Theme Customization Modal (Includes Global Background Options) -->
     <div id="theme-customize-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
+        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">🎨 Global Theme & Font Studio</h3>
+                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">🎨 Global Theme & Background Studio</h3>
                 <button onclick="closeModal('theme-customize-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Global Background Style</label>
+                    <select id="theme-bg-preset" onchange="toggleCustomBgInput(this.value)" class="w-full p-2 border border-pink-300 rounded-lg font-bold">
+                        <option value="polka">Classic Pink Polka Dots</option>
+                        <option value="hearts">Pink Hearts Pattern</option>
+                        <option value="stripes">Vintage Candy Stripes</option>
+                        <option value="solid">Solid Background Color</option>
+                        <option value="custom">Custom Image / Pattern URL</option>
+                    </select>
+                </div>
+                <div id="custom-bg-url-wrapper" class="hidden">
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Custom Background URL</label>
+                    <input type="text" id="theme-bg-url" placeholder="https://..." class="w-full p-2 border border-pink-300 rounded-lg">
+                </div>
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Primary Pink Color</label>
                     <input type="color" id="theme-primary" value="#FF66A3" class="w-full h-10 rounded cursor-pointer border border-pink-300">
@@ -872,30 +867,62 @@
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
         /* Helper function to generate custom Decal icons for Star complexity */
-        function getDecalStarsHTML(count) {
-            const decalURL = "https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif";
-            let html = '';
-            for (let i = 0; i < (count || 1); i++) {
-                html += `<img src="${decalURL}" class="w-3.5 h-3 object-contain inline-block mx-0.5" alt="decal">`;
+        function toggleCustomBgInput(val) {
+            const wrapper = document.getElementById('custom-bg-url-wrapper');
+            if (val === 'custom') {
+                wrapper.classList.remove('hidden');
+            } else {
+                wrapper.classList.add('hidden');
             }
-            return html;
         }
 
-        /* Task Completion Decal Confetti Scatter Engine */
-        function triggerTaskConfetti() {
-            const confettiURL = "https://dl7.glitter-graphics.net/pub/536/536397dgj9ef6ron.gif";
-            const count = 18;
+        function applyAndSaveTheme() {
+            const primary = document.getElementById('theme-primary').value;
+            const secondary = document.getElementById('theme-secondary').value;
+            const dark = document.getElementById('theme-dark').value;
+            const accent = document.getElementById('theme-accent').value;
+            const titleFont = document.getElementById('theme-title-font').value;
+            const bgPreset = document.getElementById('theme-bg-preset').value;
+            const bgUrl = document.getElementById('theme-bg-url').value;
 
-            for (let i = 0; i < count; i++) {
-                const img = document.createElement('img');
-                img.src = confettiURL;
-                img.className = 'confetti-decal';
-                img.style.left = `${Math.random() * 95}vw`;
-                img.style.animationDuration = `${1.8 + Math.random() * 1.5}s`;
-                img.style.animationDelay = `${Math.random() * 0.4}s`;
-                document.body.appendChild(img);
+            appData.theme = { primary, secondary, dark, accent, titleFont, bgPreset, bgUrl };
 
-                setTimeout(() => img.remove(), 3500);
+            updateGlobalThemeStyles();
+            saveToStorage();
+            closeModal('theme-customize-modal');
+        }
+
+        function updateGlobalThemeStyles() {
+            const t = appData.theme || {};
+            if (!t.primary) return;
+
+            document.documentElement.style.setProperty('--pink-primary', t.primary);
+            document.documentElement.style.setProperty('--pink-secondary', t.secondary);
+            document.documentElement.style.setProperty('--pink-dark', t.dark);
+            document.documentElement.style.setProperty('--pink-accent', t.accent);
+            document.documentElement.style.setProperty('--font-title', t.titleFont);
+
+            const body = document.body;
+            body.style.backgroundColor = t.secondary;
+
+            if (t.bgPreset === 'solid') {
+                body.style.backgroundImage = 'none';
+            } else if (t.bgPreset === 'hearts') {
+                body.style.backgroundImage = `radial-gradient(${t.primary} 3px, transparent 4px), radial-gradient(${t.accent} 3px, ${t.secondary} 4px)`;
+                body.style.backgroundSize = '30px 30px';
+                body.style.backgroundPosition = '0 0, 15px 15px';
+            } else if (t.bgPreset === 'stripes') {
+                body.style.backgroundImage = `repeating-linear-gradient(45deg, ${t.secondary}, ${t.secondary} 15px, #FFFFFF 15px, #FFFFFF 30px)`;
+                body.style.backgroundSize = 'auto';
+            } else if (t.bgPreset === 'custom' && t.bgUrl) {
+                body.style.backgroundImage = `url('${t.bgUrl}')`;
+                body.style.backgroundSize = 'cover';
+                body.style.backgroundPosition = 'center';
+            } else {
+                // Default polka dots
+                body.style.backgroundImage = `radial-gradient(var(--pink-border) 1.2px, transparent 1.2px), radial-gradient(var(--pink-border) 1.2px, var(--pink-secondary) 1.2px)`;
+                body.style.backgroundSize = '24px 24px';
+                body.style.backgroundPosition = '0 0, 12px 12px';
             }
         }
 
