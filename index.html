@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Boudoir - Pink Glam x Retro Pixel Planner & Pet Sanctuary</title>
+    <title>粉爱 - Pink Glam & Pet Room Planner</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS Variables - No Gray Text System */
         :root {
             --pink-primary: #FF66A3;
             --pink-secondary: #FFF0F5;
@@ -37,19 +36,17 @@
             color: var(--pink-dark);
         }
 
-        /* Enforce theme colors on subtexts and labels */
         p, span, label, td, th, div, input, select, textarea {
             color: var(--pink-dark);
         }
         .text-subtle {
             color: var(--pink-dark);
-            opacity: 0.82;
+            opacity: 0.85;
         }
         .text-accent-glam {
             color: var(--pink-accent);
         }
 
-        /* 2000s Retro Glam UI Card Boxes */
         .retro-box {
             background-color: #FFFFFF;
             border: 3px solid var(--pink-primary);
@@ -63,6 +60,11 @@
             border: 2px solid var(--pink-dark);
             box-shadow: 3px 3px 0px var(--pink-dark);
             transition: all 0.15s ease;
+            cursor: pointer;
+            pointer-events: auto !important;
+        }
+        .retro-button * {
+            color: #FFFFFF !important;
         }
         .retro-button:hover {
             transform: translate(-1px, -1px);
@@ -74,11 +76,17 @@
             box-shadow: 1px 1px 0px var(--pink-dark);
         }
 
+        button, input, select, textarea, a, .tab-btn, .clickable {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 10;
+        }
+
         .pixel-font { font-family: var(--font-retro); }
         .custom-title-font { font-family: var(--font-title); }
 
         .tab-btn {
-            cursor: grab;
+            cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
         }
@@ -113,26 +121,31 @@
         }
         .draggable-canvas-item:active { cursor: grabbing; }
 
-        /* Confetti particle animation */
+        /* Confetti Overlay guarantees click-through */
+        #confetti-container, .decal-overlay {
+            pointer-events: none !important;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
         @keyframes confetti-fall {
             0% {
                 transform: translateY(-20px) rotate(0deg) scale(0.8);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg) scale(1.1);
+                transform: translateY(105vh) rotate(360deg) scale(1.1);
                 opacity: 0;
             }
         }
         .confetti-decal {
-            position: fixed;
-            top: -30px;
-            z-index: 9999;
-            pointer-events: none;
+            position: absolute;
+            pointer-events: none !important;
             animation: confetti-fall 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* Pet Heart Speech Bubble */
         @keyframes bubble-pop {
             0% { transform: scale(0) translateY(10px); opacity: 0; }
             60% { transform: scale(1.1) translateY(-5px); opacity: 1; }
@@ -140,28 +153,34 @@
         }
         .pet-speech-bubble {
             animation: bubble-pop 0.4s ease-out forwards;
+            pointer-events: none !important;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-pink-300 selection:text-pink-900">
 
+    <!-- Confetti Scatter Overlay Container -->
+    <div id="confetti-container"></div>
+
     <!-- TOP HEADER / NAV BAR -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-4 border-[var(--pink-primary)] shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4">
             
-            <!-- Brand Logo with Clean Decal (No Box/Border) -->
+            <!-- Brand Header -->
             <div class="flex items-center space-x-3">
-                <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-8 h-7 object-contain drop-shadow-sm" alt="Glitter Decal Logo">
+                <a href="https://www.glitter-graphics.com" target="_blank" class="inline-block">
+                    <img src="https://dl6.glitter-graphics.net/pub/532/532236fo1y55rfbl.gif" class="h-10 w-auto object-contain drop-shadow-sm" alt="Glitter Ribbon Header Graphic">
+                </a>
                 <div>
                     <h1 class="custom-title-font text-2xl sm:text-3xl font-bold text-[var(--pink-dark)] leading-none">粉爱</h1>
-                    <p class="pixel-font text-[9px] text-accent-glam tracking-widest mt-1 uppercase">PINK GLAM & PET ROOM</p>
+                    <p class="pixel-font text-[9px] text-accent-glam tracking-widest mt-1 uppercase">pink glam and pet room</p>
                 </div>
             </div>
 
-            <!-- Currency Counter & Inventory Quick Launch -->
+            <!-- Currency & Inventory -->
             <div class="flex items-center gap-3">
                 <div class="flex items-center space-x-2 bg-[var(--pink-secondary)] px-4 py-2 rounded-full border-2 border-[var(--pink-primary)] shadow-inner">
-                    <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-4 h-3 object-contain inline-block" alt="decal">
+                    <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-4 h-3.5 object-contain inline-block" alt="Bow Decal">
                     <span class="pixel-font text-sm text-[var(--pink-dark)]" id="currency-balance">0</span>
                     <span class="text-[10px] font-bold text-accent-glam uppercase">Lovas</span>
                 </div>
@@ -170,21 +189,21 @@
                 </button>
             </div>
 
-            <!-- Reorderable Tabs -->
+            <!-- Navigation Tabs -->
             <nav id="draggable-tabs" class="flex flex-wrap gap-1 sm:gap-2">
-                <button draggable="true" onclick="switchTab('landing')" id="tab-landing" class="tab-btn active px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
+                <button onclick="switchTab('landing')" id="tab-landing" class="tab-btn active px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
                     <i class="fa-solid fa-quote-left text-accent-glam"></i> Mood & Quotes
                 </button>
-                <button draggable="true" onclick="switchTab('hotlist')" id="tab-hotlist" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
+                <button onclick="switchTab('hotlist')" id="tab-hotlist" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
                     <i class="fa-solid fa-fire text-accent-glam"></i> Hot List
                 </button>
-                <button draggable="true" onclick="switchTab('agenda')" id="tab-agenda" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
+                <button onclick="switchTab('agenda')" id="tab-agenda" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
                     <i class="fa-solid fa-calendar-days text-accent-glam"></i> Agenda 24h
                 </button>
-                <button draggable="true" onclick="switchTab('habits')" id="tab-habits" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
+                <button onclick="switchTab('habits')" id="tab-habits" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
                     <i class="fa-solid fa-square-check text-accent-glam"></i> Habits
                 </button>
-                <button draggable="true" onclick="switchTab('petroom')" id="tab-petroom" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
+                <button onclick="switchTab('petroom')" id="tab-petroom" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] bg-white flex items-center gap-1.5">
                     <i class="fa-solid fa-paw text-accent-glam"></i> Pet Room & Shop
                 </button>
             </nav>
@@ -197,10 +216,10 @@
         <!-- ================= TAB 1: MOOD & QUOTES (LANDING PAGE) ================= -->
         <section id="page-landing" class="tab-page space-y-8">
             
-            <!-- Hero Mantra Box (Daily Mantra badge removed, edit pen moved to bottom-right, buttons compacted) -->
+            <!-- Hero Daily Mantra Box -->
             <div class="retro-box p-5 sm:p-6 text-center relative overflow-hidden bg-white">
                 <div class="relative z-10 max-w-2xl mx-auto space-y-2">
-                    <div id="spotlight-quote-box" class="min-h-[90px] flex flex-col justify-center items-center relative px-6 py-1">
+                    <div id="spotlight-quote-box" class="min-h-[85px] flex flex-col justify-center items-center relative px-6 py-1">
                         <h3 id="spotlight-quote-text" class="custom-title-font italic text-lg sm:text-xl font-semibold text-[var(--pink-dark)]">
                             "Pour yourself a drink, put on some lipstick, and pull yourself together."
                         </h3>
@@ -208,14 +227,13 @@
                             — Elizabeth Taylor
                         </p>
                         
-                        <!-- Pen Edit Button placed closer to absolute bottom right corner -->
+                        <!-- Pen Edit Button placed at bottom right corner -->
                         <button onclick="editCurrentSpotlightQuote()" title="Edit Spotlight Quote" 
                             class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-pink-100 hover:bg-[var(--pink-primary)] hover:text-white border border-[var(--pink-primary)] text-[var(--pink-dark)] transition flex items-center justify-center text-[9px] shadow-xs">
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </div>
                     
-                    <!-- Compact Buttons -->
                     <div class="flex flex-wrap justify-center gap-1.5 pt-1">
                         <button onclick="generateRandomQuote()" class="retro-button px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1">
                             <i class="fa-solid fa-dice text-[9px]"></i> Shuffle Mantra
@@ -227,7 +245,7 @@
                 </div>
             </div>
 
-            <!-- Moodboard Pinboard Gallery (Constantly Cycles 3 Images) -->
+            <!-- Moodboard Pinboard Gallery (Auto Cycles 3 Images) -->
             <div class="retro-box p-6 bg-white space-y-4">
                 <div class="flex flex-wrap justify-between items-center gap-4 border-b-2 border-[var(--pink-primary)] pb-3">
                     <div>
@@ -237,14 +255,13 @@
                         <p class="text-xs text-subtle mt-0.5">Displays 3 pins at a time with automatic cycling slideshow.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <!-- Cycle Speed Selector -->
                         <div class="flex items-center gap-1 text-xs font-bold">
                             <span class="text-subtle"><i class="fa-solid fa-clock"></i> Cycle:</span>
                             <select id="pinboard-cycle-speed" onchange="updatePinboardTimer()" class="p-1.5 rounded-lg border-2 border-[var(--pink-primary)] text-xs font-bold bg-white">
                                 <option value="3000">3 Seconds</option>
                                 <option value="5000" selected>5 Seconds</option>
                                 <option value="10000">10 Seconds</option>
-                                <option value="0">Off (Manual Only)</option>
+                                <option value="0">Off (Manual)</option>
                             </select>
                         </div>
                         <button onclick="shufflePinboard()" class="retro-button px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
@@ -256,13 +273,12 @@
                     </div>
                 </div>
 
-                <!-- Active 3 Polaroid Pin Displays -->
                 <div id="moodboard-cycling-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                    <!-- Populated dynamically via JS -->
+                    <!-- Populated dynamically -->
                 </div>
             </div>
 
-            <!-- Editable Saved Quotes Bank -->
+            <!-- Editable Quote Bank -->
             <div class="retro-box p-6 space-y-4 bg-white">
                 <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-3">
                     <h3 class="custom-title-font text-xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
@@ -272,18 +288,18 @@
                 </div>
                 
                 <div id="editable-quote-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Quotes List -->
+                    <!-- Dynamic Quotes -->
                 </div>
             </div>
 
-            <!-- Compact Theme & Font Studio Module (Moved to Bottom) -->
+            <!-- Theme Customization Studio (Bottom of Landing Page) -->
             <div class="retro-box p-4 bg-pink-50/50 flex flex-wrap justify-between items-center gap-4">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-xl bg-[var(--pink-primary)] text-white flex items-center justify-center">
                         <i class="fa-solid fa-palette text-sm"></i>
                     </div>
                     <div>
-                        <h4 class="custom-title-font text-sm font-bold text-[var(--pink-dark)]">Global Theme & Color Studio</h4>
+                        <h4 class="custom-title-font text-sm font-bold text-[var(--pink-dark)]">Global Theme Studio</h4>
                         <p class="text-[11px] text-subtle">Adjust colors, font styles, accents, and text highlights across all tabs.</p>
                     </div>
                 </div>
@@ -295,7 +311,7 @@
         </section>
 
 
-        <!-- ================= TAB 2: HOT LIST (DUE SOON TIMELINES) ================= -->
+        <!-- ================= TAB 2: HOT LIST ================= -->
         <section id="page-hotlist" class="tab-page hidden space-y-6">
             
             <div class="retro-box p-6 bg-white flex flex-wrap justify-between items-center gap-4">
@@ -303,11 +319,10 @@
                     <h2 class="custom-title-font text-2xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
                         <i class="fa-solid fa-fire text-accent-glam"></i> Hot List & Deadlines
                     </h2>
-                    <p class="text-xs text-subtle mt-1">Synced bi-directionally with the 24-Hour Agenda planner! Earn scaled 🌸 Glam Bucks by difficulty.</p>
+                    <p class="text-xs text-subtle mt-1">Synced bi-directionally with 24h Agenda! Earn scaled Lovas by difficulty level.</p>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-2">
-                    <!-- Time Filters -->
                     <div class="flex bg-[var(--pink-secondary)] p-1 rounded-xl border border-[var(--pink-primary)] text-xs font-bold gap-1">
                         <button onclick="setHotlistFilter('all')" id="hotfilter-all" class="px-2.5 py-1 rounded-lg bg-[var(--pink-primary)] text-white">All</button>
                         <button onclick="setHotlistFilter('today')" id="hotfilter-today" class="px-2.5 py-1 rounded-lg hover:bg-pink-100">Today</button>
@@ -332,14 +347,14 @@
         <!-- ================= TAB 3: AGENDA (24H BLOCK PLANNER) ================= -->
         <section id="page-agenda" class="tab-page hidden space-y-6">
             
-            <!-- Quick Event Assistant (Lightbulb section removed) -->
+            <!-- Quick Event Assistant -->
             <div class="retro-box p-5 bg-white space-y-3">
                 <div class="flex flex-col md:flex-row items-center gap-3">
                     <div class="flex items-center gap-2 font-bold text-xs text-[var(--pink-dark)] whitespace-nowrap">
                         <i class="fa-solid fa-wand-magic-sparkles text-accent-glam"></i> Quick Smart Event Parser:
                     </div>
                     <div class="relative w-full">
-                        <input type="text" id="smart-agenda-input" placeholder="e.g. 'Piano Practice on Wednesday at 15:00' or 'Galas Friday 9am'" 
+                        <input type="text" id="smart-agenda-input" placeholder="e.g. 'Piano Practice on Wednesday at 15:00' or 'Gala Friday 9am'" 
                             class="w-full px-4 py-2 rounded-xl border-2 border-[var(--pink-primary)] focus:outline-none text-xs bg-pink-50/30">
                         <button onclick="parseSmartAgendaEvent()" class="absolute right-1 top-1 bottom-1 retro-button px-3.5 rounded-lg text-xs font-bold">
                             Quick Add
@@ -369,13 +384,11 @@
             <!-- 24-Hour Grid Container -->
             <div class="retro-box bg-white overflow-x-auto">
                 <div class="min-w-[850px]">
-                    <!-- Header -->
                     <div id="agenda-grid-header" class="grid grid-cols-8 border-b-2 border-[var(--pink-primary)] bg-[var(--pink-secondary)] text-center text-xs font-bold">
                         <div class="py-3 border-r border-[var(--pink-border)]">Time (24h)</div>
                         <!-- Days populated via JS -->
                     </div>
 
-                    <!-- 24 Hours Body -->
                     <div id="agenda-grid-body" class="max-h-[600px] overflow-y-auto divide-y divide-pink-100">
                         <!-- Hour rows populated via JS -->
                     </div>
@@ -393,7 +406,7 @@
                     <h2 class="custom-title-font text-2xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
                         <i class="fa-solid fa-square-check text-accent-glam"></i> Weekly Habit Rituals
                     </h2>
-                    <p class="text-xs text-subtle mt-1" id="habits-sublabel">Checkboxes auto reset each new week! Task difficulty (1-5 ⭐) scales Glam Bucks earnings (🌸).</p>
+                    <p class="text-xs text-subtle mt-1">Checkboxes auto reset each new week! Task difficulty (1-5 Level) scales Lovas earnings.</p>
                 </div>
                 <button onclick="openModal('add-habit-modal')" class="retro-button px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
                     <i class="fa-solid fa-plus"></i> Create Habit Ritual
@@ -441,7 +454,7 @@
                     
                     <div class="flex flex-wrap gap-2">
                         <button onclick="openModal('custom-bg-modal')" class="retro-button px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
-                            <i class="fa-solid fa-image"></i> Change Bedroom Background URL
+                            <i class="fa-solid fa-image"></i> Bedroom Background URL
                         </button>
                         <button onclick="toggleBackpackModal()" class="bg-white border-2 border-[var(--pink-primary)] px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-pink-50 flex items-center gap-1.5">
                             <i class="fa-solid fa-toolbox text-accent-glam"></i> Open Inventory
@@ -449,7 +462,7 @@
                     </div>
                 </div>
 
-                <!-- Pet Status Need Meters (Dynamic for Active Equipped Pet) -->
+                <!-- Pet Status Need Meters -->
                 <div id="pet-status-bar" class="p-4 bg-[var(--pink-secondary)] rounded-2xl border-2 border-[var(--pink-primary)] grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-bold">
                     <div>
                         <div class="flex justify-between text-[11px] mb-1">
@@ -492,46 +505,41 @@
                     </div>
                 </div>
 
-                <!-- Pet Room Canvas Container -->
+                <!-- Pet Room Canvas -->
                 <div id="pet-room-viewport" class="relative w-full h-[400px] sm:h-[480px] rounded-2xl border-4 border-[var(--pink-primary)] overflow-hidden bg-gradient-to-b from-pink-100 via-pink-50 to-pink-200 shadow-inner">
-                    <!-- Dynamic Wallpaper -->
                     <div id="pet-room-bg-layer" class="absolute inset-0 bg-cover bg-center transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80')"></div>
                     
-                    <!-- Interactive Canvas Draggable Area -->
                     <div id="pet-room-canvas" class="absolute inset-0 p-4">
-                        <!-- Placed pets, foods, toys appear here and are freely draggable -->
+                        <!-- Placed pets/items appear here -->
                     </div>
 
                     <div id="empty-room-hint" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-4 text-center">
                         <div class="bg-white/90 p-5 rounded-2xl border-2 border-[var(--pink-primary)] max-w-sm backdrop-blur-xs">
                             <i class="fa-solid fa-paw text-3xl text-accent-glam mb-2"></i>
                             <h4 class="font-bold text-sm text-[var(--pink-dark)]">Your Pet Room Canvas</h4>
-                            <p class="text-xs text-subtle mt-1">Open your <b>Inventory</b> to place purchased pets, toys, or foods! Drag items over pets to care for them!</p>
+                            <p class="text-xs text-subtle mt-1">Open <b>Inventory</b> to place purchased pets, toys, or foods! Drag items over pets to care for them!</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Boutique Shop (Daily Rotation Display: 1 Per Category) -->
+            <!-- Boutique Shop (1 Item per category daily) -->
             <div class="space-y-4">
                 <div class="flex flex-wrap justify-between items-center border-b-2 border-[var(--pink-primary)] pb-3 gap-3">
                     <div>
                         <h3 class="custom-title-font text-2xl font-bold text-[var(--pink-dark)] flex items-center gap-2">
                             <i class="fa-solid fa-store text-accent-glam"></i> La Boutique & Pet Supply
                         </h3>
-                        <p class="text-xs text-subtle">Daily Rotation: Exactly 1 item per category is featured daily! Consumables can be bought multiple times!</p>
+                        <p class="text-xs text-subtle">Daily Rotation: 1 item per category displayed daily! Consumables can be bought multiple times.</p>
                     </div>
 
-                    <div class="flex gap-2">
-                        <button onclick="openModal('edit-master-catalog-modal')" class="retro-button px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit Master Catalog
-                        </button>
-                    </div>
+                    <button onclick="openModal('edit-master-catalog-modal')" class="retro-button px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square"></i> Master Catalog Editor
+                    </button>
                 </div>
 
-                <!-- Daily Featured Shop Catalog Grid -->
                 <div id="daily-shop-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    <!-- Populated via JS with 4 daily items (Pet, Food, Toy, Hygiene/Medicine) -->
+                    <!-- Daily shop items -->
                 </div>
             </div>
 
@@ -540,13 +548,22 @@
     </main>
 
 
-    <!-- ================= ALL MODALS & INVENTORY POPUPS ================= -->
+    <!-- ================= ALL MODALS & POPUPS ================= -->
 
-    <!-- Inventory / Backpack Drawer Modal -->
+    <!-- Inventory / Backpack Modal -->
     <div id="backpack-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-xl w-full p-6 bg-white space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-    <!-- Theme Customization Modal (Includes Global Background Options) -->
+                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]"><i class="fa-solid fa-bag-shopping text-accent-glam"></i> Inventory Backpack</h3>
+                <button onclick="closeModal('backpack-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="inventory-items-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto p-1 flex-grow">
+                <!-- Inventory Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Customizer Modal -->
     <div id="theme-customize-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
@@ -555,7 +572,7 @@
             </div>
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Global Background Style</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Global Background Preset</label>
                     <select id="theme-bg-preset" onchange="toggleCustomBgInput(this.value)" class="w-full p-2 border border-pink-300 rounded-lg font-bold">
                         <option value="polka">Classic Pink Polka Dots</option>
                         <option value="hearts">Pink Hearts Pattern</option>
@@ -573,15 +590,15 @@
                     <input type="color" id="theme-primary" value="#FF66A3" class="w-full h-10 rounded cursor-pointer border border-pink-300">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Secondary Soft Pink Background</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Secondary Soft Background</label>
                     <input type="color" id="theme-secondary" value="#FFF0F5" class="w-full h-10 rounded cursor-pointer border border-pink-300">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Dark Pink Text & Accents (No Default Gray!)</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Dark Text Color</label>
                     <input type="color" id="theme-dark" value="#8B0046" class="w-full h-10 rounded cursor-pointer border border-pink-300">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Neon Pink Highlight</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Accent Highlight</label>
                     <input type="color" id="theme-accent" value="#FF1493" class="w-full h-10 rounded cursor-pointer border border-pink-300">
                 </div>
                 <div>
@@ -602,61 +619,58 @@
         </div>
     </div>
 
-    <!-- Multi-Event Slot Details & Color Picker Modal -->
+    <!-- Multi-Event Slot Modal -->
     <div id="agenda-slot-multi-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-lg w-full p-6 bg-white space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 id="multi-slot-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Events at Time Slot</h3>
+                <h3 id="multi-slot-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Events at Hour</h3>
                 <button onclick="closeModal('agenda-slot-multi-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
-            <!-- List of events inside this specific hour -->
             <div id="multi-slot-events-list" class="space-y-3 overflow-y-auto p-1 flex-grow">
-                <!-- Rendered dynamically -->
+                <!-- Multi events list -->
             </div>
-
             <div class="border-t border-pink-200 pt-3">
                 <button onclick="addNewEventToSlot()" class="retro-button w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-plus"></i> Add Event to this Hour
+                    <i class="fa-solid fa-plus"></i> Add Event to this Slot
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Add / Edit Single Event Modal (Hotlist & Agenda Synced) -->
+    <!-- Edit/Add Task Event Modal -->
     <div id="edit-event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 id="event-modal-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Add / Edit Task Event</h3>
+                <h3 id="event-modal-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Task Event</h3>
                 <button onclick="closeModal('edit-event-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="edit-event-id" value="">
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Title / Description</label>
-                    <input type="text" id="event-title-input" placeholder="e.g. Piano Lesson, Gala Pre-sale" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Title</label>
+                    <input type="text" id="event-title-input" placeholder="e.g. Piano Practice" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Date & Time</label>
                     <input type="datetime-local" id="event-datetime-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Complexity Level (1 - 5 ⭐)</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Complexity Level (1 - 5 Level)</label>
                     <select id="event-complexity-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl font-bold">
-                        <option value="1">⭐ Level 1 (Easy - 🌸 10)</option>
-                        <option value="2">⭐⭐ Level 2 (Moderate - 🌸 20)</option>
-                        <option value="3">⭐⭐⭐ Level 3 (Challenging - 🌸 30)</option>
-                        <option value="4">⭐⭐⭐⭐ Level 4 (Hard - 🌸 40)</option>
-                        <option value="5">⭐⭐⭐⭐⭐ Level 5 (Extreme - 🌸 50)</option>
+                        <option value="1">Level 1 (Easy - 10 Lovas)</option>
+                        <option value="2">Level 2 (Moderate - 20 Lovas)</option>
+                        <option value="3">Level 3 (Challenging - 30 Lovas)</option>
+                        <option value="4">Level 4 (Hard - 40 Lovas)</option>
+                        <option value="5">Level 5 (Extreme - 50 Lovas)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Custom Event Block Color</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Custom Block Color</label>
                     <input type="color" id="event-color-input" value="#FF66A3" class="w-full h-9 rounded cursor-pointer border border-pink-300">
                 </div>
             </div>
             <div class="flex justify-between items-center pt-2">
-                <button onclick="deleteEventFromModal()" id="delete-event-btn" class="text-xs text-red-500 font-bold hover:underline">Delete Event</button>
+                <button onclick="deleteEventFromModal()" id="delete-event-btn" class="text-xs text-red-500 font-bold hover:underline">Delete Task</button>
                 <div class="flex gap-2">
                     <button onclick="closeModal('edit-event-modal')" class="px-4 py-2 border rounded-xl font-bold text-xs">Cancel</button>
                     <button onclick="saveEventItem()" class="retro-button px-5 py-2 rounded-xl text-xs font-bold">Save Task</button>
@@ -665,7 +679,7 @@
         </div>
     </div>
 
-    <!-- Quote Modal -->
+    <!-- Add Quote Modal -->
     <div id="add-quote-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
@@ -690,7 +704,7 @@
         </div>
     </div>
 
-    <!-- Pin Modal -->
+    <!-- Add Mood Pin Modal -->
     <div id="add-mood-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
@@ -700,11 +714,11 @@
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Image URL</label>
-                    <input type="text" id="mood-url-input" placeholder="https://images.unsplash.com/..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                    <input type="text" id="mood-url-input" placeholder="https://..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Caption</label>
-                    <input type="text" id="mood-caption-input" placeholder="e.g. Afternoon Tea in Paris" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                    <input type="text" id="mood-caption-input" placeholder="e.g. Parisian Afternoon Tea" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
             </div>
             <div class="flex justify-end gap-2 pt-2">
@@ -718,23 +732,23 @@
     <div id="add-habit-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 id="habit-modal-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Create Habit Ritual</h3>
+                <h3 id="habit-modal-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Habit Ritual</h3>
                 <button onclick="closeModal('add-habit-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="edit-habit-index" value="-1">
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Habit / Goal Name</label>
-                    <input type="text" id="habit-name-input" placeholder="e.g. Pilates Workout, Read 20 mins" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Habit Name</label>
+                    <input type="text" id="habit-name-input" placeholder="e.g. Pilates Workout" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Complexity Level (1 - 5 ⭐)</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Complexity Level (1 - 5 Level)</label>
                     <select id="habit-complexity-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl font-bold">
-                        <option value="1">⭐ Level 1 (Easy - 🌸 10/day)</option>
-                        <option value="2">⭐⭐ Level 2 (Moderate - 🌸 20/day)</option>
-                        <option value="3">⭐⭐⭐ Level 3 (Challenging - 🌸 30/day)</option>
-                        <option value="4">⭐⭐⭐⭐ Level 4 (Hard - 🌸 40/day)</option>
-                        <option value="5">⭐⭐⭐⭐⭐ Level 5 (Extreme - 🌸 50/day)</option>
+                        <option value="1">Level 1 (Easy - 10 Lovas/day)</option>
+                        <option value="2">Level 2 (Moderate - 20 Lovas/day)</option>
+                        <option value="3">Level 3 (Challenging - 30 Lovas/day)</option>
+                        <option value="4">Level 4 (Hard - 40 Lovas/day)</option>
+                        <option value="5">Level 5 (Extreme - 50 Lovas/day)</option>
                     </select>
                 </div>
             </div>
@@ -762,13 +776,13 @@
                     <input type="datetime-local" id="hotlist-date-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Task Complexity Level (1 - 5 ⭐)</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Complexity Level (1 - 5 Level)</label>
                     <select id="hotlist-complexity-input" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl font-bold">
-                        <option value="1">⭐ Level 1 (Easy - 🌸 10)</option>
-                        <option value="2">⭐⭐ Level 2 (Moderate - 🌸 20)</option>
-                        <option value="3">⭐⭐⭐ Level 3 (Challenging - 🌸 30)</option>
-                        <option value="4">⭐⭐⭐⭐ Level 4 (Hard - 🌸 40)</option>
-                        <option value="5">⭐⭐⭐⭐⭐ Level 5 (Extreme - 🌸 50)</option>
+                        <option value="1">Level 1 (Easy - 10 Lovas)</option>
+                        <option value="2">Level 2 (Moderate - 20 Lovas)</option>
+                        <option value="3">Level 3 (Challenging - 30 Lovas)</option>
+                        <option value="4">Level 4 (Hard - 40 Lovas)</option>
+                        <option value="5">Level 5 (Extreme - 50 Lovas)</option>
                     </select>
                 </div>
             </div>
@@ -779,7 +793,7 @@
         </div>
     </div>
 
-    <!-- Custom Background URL Modal -->
+    <!-- Custom Bedroom Background Modal -->
     <div id="custom-bg-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
@@ -789,7 +803,7 @@
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-[var(--pink-dark)] mb-1">Image URL</label>
-                    <input type="text" id="custom-bg-url-input" placeholder="https://images.unsplash.com/..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                    <input type="text" id="custom-bg-url-input" placeholder="https://..." class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
                 </div>
             </div>
             <div class="flex justify-end gap-2 pt-2">
@@ -808,24 +822,23 @@
             </div>
             
             <div class="flex justify-between items-center">
-                <p class="text-xs text-subtle">Add custom pets, toys, food, or hygiene items with custom prices & transparency!</p>
+                <p class="text-xs text-subtle">Add custom pets, toys, food, or hygiene items!</p>
                 <button onclick="openAddNewCatalogItemForm()" class="retro-button px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
                     <i class="fa-solid fa-plus"></i> Create Catalog Item
                 </button>
             </div>
 
-            <!-- Master Items List -->
             <div id="master-catalog-list" class="space-y-3 overflow-y-auto p-1 flex-grow">
-                <!-- Populated via JS -->
+                <!-- Master Catalog Items -->
             </div>
         </div>
     </div>
 
-    <!-- Add/Edit Single Catalog Item Form Modal -->
+    <!-- Single Catalog Item Form Modal -->
     <div id="catalog-item-form-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="retro-box max-w-md w-full p-6 bg-white space-y-4">
             <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
-                <h3 id="catalog-form-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Add Catalog Item</h3>
+                <h3 id="catalog-form-title" class="custom-title-font font-bold text-lg text-[var(--pink-dark)]">Catalog Item</h3>
                 <button onclick="closeModal('catalog-item-form-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="edit-cat-item-id" value="">
@@ -844,7 +857,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Price (🌸 Glam Bucks)</label>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Price (Lovas)</label>
                     <input type="number" id="cat-price-input" value="30" min="5" class="w-full p-2 border-2 border-[var(--pink-primary)] rounded-xl">
                 </div>
                 <div>
@@ -853,7 +866,7 @@
                 </div>
                 <div class="flex items-center gap-2 pt-1">
                     <input type="checkbox" id="cat-transparent-input" class="w-4 h-4 accent-[var(--pink-accent)]">
-                    <label for="cat-transparent-input" class="font-bold text-[var(--pink-dark)]">Transparent PNG Background rendering</label>
+                    <label for="cat-transparent-input" class="font-bold text-[var(--pink-dark)]">Transparent PNG Rendering</label>
                 </div>
             </div>
             <div class="flex justify-end gap-2 pt-2">
@@ -864,9 +877,1039 @@
     </div>
 
 
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <!-- ================= MAIN CORE SCRIPT ================= -->
     <script>
-        /* Helper function to generate custom Decal icons for Star complexity */
+        /* GLOBAL APPLICATION STATE & DATA MODEL */
+        const STORAGE_KEY = 'PinkLovePlanner_State_v3';
+
+        let appData = {
+            currency: 150,
+            activeTab: 'landing',
+            hotlistFilter: 'all',
+            currentAgendaWeekOffset: 0,
+            pinboardCycleIndex: 0,
+            pinboardCycleSpeed: 5000,
+            bedroomBG: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+            
+            theme: {
+                primary: '#FF66A3',
+                secondary: '#FFF0F5',
+                dark: '#8B0046',
+                accent: '#FF1493',
+                titleFont: "'Playfair Display', serif",
+                bgPreset: 'polka',
+                bgUrl: ''
+            },
+
+            quotes: [
+                { text: "Pour yourself a drink, put on some lipstick, and pull yourself together.", author: "Elizabeth Taylor" },
+                { text: "I believe in pink. I believe that laughing is the best calorie burner.", author: "Audrey Hepburn" },
+                { text: "Always dress like you're going to see your worst enemy.", author: "Coco Chanel" },
+                { text: "Elegance is the only beauty that never fades.", author: "Audrey Hepburn" }
+            ],
+
+            pins: [
+                { url: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80", caption: "Parisian Morning Coffee" },
+                { url: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80", caption: "Pink Glam Aesthetics" },
+                { url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80", caption: "Boudoir Beauty Rituals" },
+                { url: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80", caption: "Chic Avenue Shopping" }
+            ],
+
+            events: [
+                { id: 'ev-1', title: 'Pilates Class & Juice', datetime: new Date(Date.now() + 86400000).toISOString().slice(0,16), complexity: 2, color: '#FF66A3' },
+                { id: 'ev-2', title: 'VIP Pre-Sale Gala', datetime: new Date(Date.now() + 172800000).toISOString().slice(0,16), complexity: 4, color: '#FF1493' }
+            ],
+
+            habits: [
+                { title: 'Morning Skincare Ritual', level: 1, checks: [true, true, true, false, false, false, false] },
+                { title: 'Workout / Pilates', level: 3, checks: [true, false, true, false, true, false, false] },
+                { title: 'Read 20 Pages', level: 2, checks: [true, true, false, true, false, false, false] }
+            ],
+
+            masterCatalog: [
+                { id: 'cat-poodle', name: 'Persian Poodle', type: 'pet', price: 100, img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80', transparent: false, favItems: ['cat-macaron', 'cat-bone'], icon: 'fa-paw' },
+                { id: 'cat-kitten', name: 'Persian Kitten', type: 'pet', price: 120, img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80', transparent: false, favItems: ['cat-fish', 'cat-ribbon'], icon: 'fa-cat' },
+                { id: 'cat-macaron', name: 'Pink Macaron Treat', type: 'food', price: 20, img: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hunger: 30, happy: 20 }, icon: 'fa-cookie' },
+                { id: 'cat-fish', name: 'Gourmet Salmon', type: 'food', price: 25, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hunger: 40, happy: 25 }, icon: 'fa-fish' },
+                { id: 'cat-bone', name: 'Glitter Plush Toy', type: 'toy', price: 30, img: 'https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { happy: 35 }, icon: 'fa-baseball' },
+                { id: 'cat-ribbon', name: 'Silk Ribbon Bow', type: 'toy', price: 25, img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { happy: 30 }, icon: 'fa-ribbon' },
+                { id: 'cat-soap', name: 'Rose Bubble Bath', type: 'hygiene', price: 35, img: 'https://images.unsplash.com/photo-1607006482182-3d7110d90e66?auto=format&fit=crop&w=500&q=80', transparent: false, boost: { hygiene: 40, happy: 15 }, icon: 'fa-soap' }
+            ],
+
+            inventory: [
+                { itemId: 'cat-poodle', qty: 1 },
+                { itemId: 'cat-macaron', qty: 3 }
+            ],
+
+            placedCanvasItems: [
+                { instanceId: 'inst-poodle-1', itemId: 'cat-poodle', x: 120, y: 180 }
+            ],
+
+            activePetStats: {
+                hunger: 80,
+                happy: 90,
+                hygiene: 75,
+                health: 100
+            }
+        };
+
+        let pinboardTimer = null;
+        let activeSelectedHourSlot = null;
+
+        /* INITIALIZATION ON DOM READY */
+        window.onload = function() {
+            loadFromStorage();
+            updateGlobalThemeStyles();
+            switchTab(appData.activeTab || 'landing');
+            startPinboardTimer();
+            updateCurrencyUI();
+        };
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error("Storage save failed", e);
+            }
+        }
+
+        function loadFromStorage() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    appData = { ...appData, ...parsed };
+                } catch(e) {
+                    console.error("Storage parse failed", e);
+                }
+            }
+        }
+
+        /* NAVIGATION TABS */
+        function switchTab(tabId) {
+            appData.activeTab = tabId;
+            document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const activePage = document.getElementById(`page-${tabId}`);
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+
+            if (activePage) activePage.classList.remove('hidden');
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (tabId === 'landing') {
+                renderLandingSpotlight();
+                renderPinboard();
+                renderQuotesList();
+            } else if (tabId === 'hotlist') {
+                renderHotlist();
+            } else if (tabId === 'agenda') {
+                renderAgendaGrid();
+            } else if (tabId === 'habits') {
+                renderHabits();
+            } else if (tabId === 'petroom') {
+                renderPetRoomCanvas();
+                renderPetStatusBars();
+                renderDailyShopCatalog();
+            }
+
+            saveToStorage();
+        }
+
+        /* DECAL HELPER FUNCTION */
+        function getDecalStarsHTML(count) {
+            const num = Math.min(5, Math.max(1, parseInt(count) || 1));
+            let html = '';
+            for (let i = 0; i < num; i++) {
+                html += `<img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 object-contain inline-block mr-0.5" alt="star-bow">`;
+            }
+            return html;
+        }
+
+        /* CONFETTI SCATTER EFFECT */
+        function triggerTaskConfetti() {
+            const container = document.getElementById('confetti-container');
+            const decalSrc = "https://dl7.glitter-graphics.net/pub/536/536397dgj9ef6ron.gif";
+
+            for (let i = 0; i < 18; i++) {
+                const img = document.createElement('img');
+                img.src = decalSrc;
+                img.className = 'confetti-decal';
+                img.style.left = `${Math.random() * 95}vw`;
+                img.style.top = `-30px`;
+                img.style.animationDelay = `${Math.random() * 0.8}s`;
+                img.style.animationDuration = `${2 + Math.random() * 1.5}s`;
+                container.appendChild(img);
+
+                setTimeout(() => img.remove(), 4000);
+            }
+        }
+
+        /* CURRENCY & LOVAS */
+        function updateCurrencyUI() {
+            document.getElementById('currency-balance').textContent = appData.currency;
+            const totalInventory = appData.inventory.reduce((acc, curr) => acc + curr.qty, 0);
+            document.getElementById('inventory-badge-count').textContent = totalInventory;
+        }
+
+        function addCurrency(pts) {
+            appData.currency += pts;
+            updateCurrencyUI();
+            triggerTaskConfetti();
+            saveToStorage();
+        }
+
+        /* LANDING PAGE & QUOTES */
+        function renderLandingSpotlight() {
+            if (!appData.quotes.length) return;
+            const q = appData.quotes[0];
+            document.getElementById('spotlight-quote-text').textContent = `"${q.text}"`;
+            document.getElementById('spotlight-quote-author').textContent = `— ${q.author || 'Anonymous'}`;
+        }
+
+        function generateRandomQuote() {
+            if (!appData.quotes.length) return;
+            const rand = appData.quotes[Math.floor(Math.random() * appData.quotes.length)];
+            document.getElementById('spotlight-quote-text').textContent = `"${rand.text}"`;
+            document.getElementById('spotlight-quote-author').textContent = `— ${rand.author || 'Anonymous'}`;
+        }
+
+        function editCurrentSpotlightQuote() {
+            const currentText = document.getElementById('spotlight-quote-text').textContent.replace(/^"|"$/g, '');
+            const currentAuth = document.getElementById('spotlight-quote-author').textContent.replace(/^—\s*/, '');
+
+            document.getElementById('edit-quote-index').value = '0';
+            document.getElementById('quote-input-text').value = currentText;
+            document.getElementById('quote-input-author').value = currentAuth;
+            document.getElementById('quote-modal-heading').textContent = "Edit Spotlight Quote";
+            openModal('add-quote-modal');
+        }
+
+        function renderQuotesList() {
+            const list = document.getElementById('editable-quote-list');
+            document.getElementById('quote-count-badge').textContent = `${appData.quotes.length} Quotes`;
+
+            list.innerHTML = appData.quotes.map((q, idx) => `
+                <div class="p-3.5 bg-pink-50/60 rounded-xl border border-pink-200 flex justify-between items-start gap-2">
+                    <div>
+                        <p class="custom-title-font italic text-sm font-semibold text-[var(--pink-dark)]">"${q.text}"</p>
+                        <p class="pixel-font text-[9px] text-accent-glam mt-1">— ${q.author || 'Anonymous'}</p>
+                    </div>
+                    <div class="flex gap-1.5 shrink-0">
+                        <button onclick="openEditQuoteModal(${idx})" class="text-xs text-[var(--pink-dark)] hover:text-accent-glam p-1"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteQuote(${idx})" class="text-xs text-red-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEditQuoteModal(idx) {
+            const q = appData.quotes[idx];
+            document.getElementById('edit-quote-index').value = idx;
+            document.getElementById('quote-input-text').value = q.text;
+            document.getElementById('quote-input-author').value = q.author || '';
+            document.getElementById('quote-modal-heading').textContent = "Edit Quote";
+            openModal('add-quote-modal');
+        }
+
+        function saveQuoteItem() {
+            const text = document.getElementById('quote-input-text').value.trim();
+            const author = document.getElementById('quote-input-author').value.trim();
+            const idx = parseInt(document.getElementById('edit-quote-index').value);
+
+            if (!text) return alert("Please enter quote text!");
+
+            if (idx >= 0 && idx < appData.quotes.length) {
+                appData.quotes[idx] = { text, author };
+            } else {
+                appData.quotes.unshift({ text, author });
+            }
+
+            closeModal('add-quote-modal');
+            renderLandingSpotlight();
+            renderQuotesList();
+            saveToStorage();
+        }
+
+        function deleteQuote(idx) {
+            appData.quotes.splice(idx, 1);
+            renderQuotesList();
+            renderLandingSpotlight();
+            saveToStorage();
+        }
+
+        /* MOODBOARD PINBOARD */
+        function renderPinboard() {
+            const container = document.getElementById('moodboard-cycling-container');
+            if (!appData.pins.length) {
+                container.innerHTML = `<p class="col-span-full text-center text-xs text-subtle py-6">No inspiration pins yet!</p>`;
+                return;
+            }
+
+            const visible = [];
+            const total = appData.pins.length;
+            for (let i = 0; i < Math.min(3, total); i++) {
+                const pIdx = (appData.pinboardCycleIndex + i) % total;
+                visible.push({ ...appData.pins[pIdx], originalIdx: pIdx });
+            }
+
+            const rotations = ['-rotate-2', 'rotate-1', 'rotate-3'];
+
+            container.innerHTML = visible.map((pin, i) => `
+                <div class="polaroid-pin rounded-xl ${rotations[i % 3]} relative">
+                    <img src="${pin.url}" class="w-full h-48 object-cover rounded-md" onerror="this.src='https://placehold.co/400x300/FF66A3/white?text=Inspiration'">
+                    <p class="custom-title-font italic text-center text-xs font-bold text-[var(--pink-dark)] mt-3">${pin.caption || 'Chic Vibes'}</p>
+                    <button onclick="deleteMoodPin(${pin.originalIdx})" class="absolute top-2 right-2 bg-white/90 w-6 h-6 rounded-full text-red-500 hover:text-red-700 flex items-center justify-center text-xs shadow-md">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function startPinboardTimer() {
+            if (pinboardTimer) clearInterval(pinboardTimer);
+            if (appData.pinboardCycleSpeed > 0) {
+                pinboardTimer = setInterval(() => {
+                    if (appData.pins.length) {
+                        appData.pinboardCycleIndex = (appData.pinboardCycleIndex + 1) % appData.pins.length;
+                        renderPinboard();
+                    }
+                }, appData.pinboardCycleSpeed);
+            }
+        }
+
+        function updatePinboardTimer() {
+            const val = parseInt(document.getElementById('pinboard-cycle-speed').value);
+            appData.pinboardCycleSpeed = val;
+            startPinboardTimer();
+            saveToStorage();
+        }
+
+        function shufflePinboard() {
+            if (!appData.pins.length) return;
+            appData.pins.sort(() => Math.random() - 0.5);
+            appData.pinboardCycleIndex = 0;
+            renderPinboard();
+            saveToStorage();
+        }
+
+        function saveMoodPin() {
+            const url = document.getElementById('mood-url-input').value.trim();
+            const caption = document.getElementById('mood-caption-input').value.trim();
+            if (!url) return alert("Please enter image URL!");
+
+            appData.pins.unshift({ url, caption });
+            closeModal('add-mood-modal');
+            renderPinboard();
+            saveToStorage();
+        }
+
+        function deleteMoodPin(idx) {
+            appData.pins.splice(idx, 1);
+            renderPinboard();
+            saveToStorage();
+        }
+
+        /* HOTLIST TAB */
+        function setHotlistFilter(filter) {
+            appData.hotlistFilter = filter;
+            document.querySelectorAll('[id^="hotfilter-"]').forEach(btn => {
+                btn.className = "px-2.5 py-1 rounded-lg hover:bg-pink-100";
+            });
+            const active = document.getElementById(`hotfilter-${filter}`);
+            if (active) active.className = "px-2.5 py-1 rounded-lg bg-[var(--pink-primary)] text-white";
+            renderHotlist();
+        }
+
+        function renderHotlist() {
+            const grid = document.getElementById('hotlist-grid');
+            const now = new Date();
+            
+            let filtered = appData.events.filter(ev => {
+                const evDate = new Date(ev.datetime);
+                if (isNaN(evDate)) return true;
+
+                if (appData.hotlistFilter === 'today') {
+                    return evDate.toDateString() === now.toDateString();
+                } else if (appData.hotlistFilter === 'week') {
+                    const next7 = new Date(now);
+                    next7.setDate(now.getDate() + 7);
+                    return evDate >= now && evDate <= next7;
+                } else if (appData.hotlistFilter === 'nextweek') {
+                    const startNext = new Date(now);
+                    startNext.setDate(now.getDate() + 7);
+                    const endNext = new Date(now);
+                    endNext.setDate(now.getDate() + 14);
+                    return evDate >= startNext && evDate <= endNext;
+                } else if (appData.hotlistFilter === 'month') {
+                    return evDate.getMonth() === now.getMonth() && evDate.getFullYear() === now.getFullYear();
+                }
+                return true;
+            });
+
+            if (!filtered.length) {
+                grid.innerHTML = `<p class="col-span-full text-center text-xs text-subtle py-8">No timeline events for this filter!</p>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const reward = (item.complexity || 1) * 10;
+                return `
+                    <div class="retro-box p-5 bg-white space-y-3 flex flex-col justify-between border-l-8" style="border-left-color: ${item.color || 'var(--pink-primary)'}">
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <span class="pixel-font text-[9px] text-accent-glam uppercase">DUE SOON</span>
+                                <span class="flex items-center">${getDecalStarsHTML(item.complexity)}</span>
+                            </div>
+                            <h4 class="custom-title-font font-bold text-base text-[var(--pink-dark)] mt-1">${item.title}</h4>
+                            <p class="text-xs text-subtle italic mt-1">${new Date(item.datetime).toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="openEditEventModal('${item.id}')" class="px-3 py-1.5 border border-pink-300 rounded-lg text-xs font-bold hover:bg-pink-50">Edit</button>
+                            <button onclick="completeEventTask('${item.id}')" class="retro-button flex-grow py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1">
+                                Complete (+<img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 object-contain"> ${reward})
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function completeEventTask(eventId) {
+            const ev = appData.events.find(e => e.id === eventId);
+            if (!ev) return;
+            const reward = (ev.complexity || 1) * 10;
+            appData.events = appData.events.filter(e => e.id !== eventId);
+            addCurrency(reward);
+            renderHotlist();
+            renderAgendaGrid();
+            saveToStorage();
+        }
+
+        function saveHotlistWrapperItem() {
+            const title = document.getElementById('hotlist-title-input').value.trim();
+            const datetime = document.getElementById('hotlist-date-input').value;
+            const complexity = parseInt(document.getElementById('hotlist-complexity-input').value) || 1;
+
+            if (!title || !datetime) return alert("Please fill title and date!");
+
+            appData.events.unshift({
+                id: 'ev-' + Date.now(),
+                title,
+                datetime,
+                complexity,
+                color: '#FF66A3'
+            });
+
+            closeModal('add-hotlist-modal');
+            renderHotlist();
+            renderAgendaGrid();
+            saveToStorage();
+        }
+
+        /* AGENDA 24H BLOCK PLANNER */
+        function getWeekDays(offset = 0) {
+            const curr = new Date();
+            const first = curr.getDate() - curr.getDay() + (offset * 7);
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const next = new Date(curr.setDate(first + i));
+                days.push(next);
+            }
+            return days;
+        }
+
+        function changeAgendaWeek(step) {
+            appData.currentAgendaWeekOffset += step;
+            renderAgendaGrid();
+        }
+
+        function resetAgendaToCurrentWeek() {
+            appData.currentAgendaWeekOffset = 0;
+            renderAgendaGrid();
+        }
+
+        function renderAgendaGrid() {
+            const days = getWeekDays(appData.currentAgendaWeekOffset);
+            const firstDay = days[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const lastDay = days[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('agenda-week-display').textContent = `${firstDay} - ${lastDay}`;
+
+            const header = document.getElementById('agenda-grid-header');
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            header.innerHTML = `<div class="py-3 border-r border-[var(--pink-border)]">Time (24h)</div>` +
+                days.map((d, i) => `
+                    <div class="py-2 border-r border-[var(--pink-border)] ${d.toDateString() === new Date().toDateString() ? 'bg-pink-200/60 font-black' : ''}">
+                        <div>${dayNames[i]}</div>
+                        <div class="text-[10px] text-subtle">${d.getMonth()+1}/${d.getDate()}</div>
+                    </div>
+                `).join('');
+
+            const body = document.getElementById('agenda-grid-body');
+            let rowsHTML = '';
+
+            for (let hour = 0; hour < 24; hour++) {
+                const hourStr = hour.toString().padStart(2, '0') + ':00';
+                rowsHTML += `<div class="grid grid-cols-8 min-h-[44px]">`;
+                rowsHTML += `<div class="p-2 border-r border-[var(--pink-border)] text-center text-[11px] font-bold text-subtle bg-pink-50/40 flex items-center justify-center">${hourStr}</div>`;
+
+                for (let dIdx = 0; dIdx < 7; dIdx++) {
+                    const cellDateStr = days[dIdx].toISOString().slice(0, 10);
+                    
+                    const slotEvents = appData.events.filter(e => {
+                        if (!e.datetime) return false;
+                        const eDate = new Date(e.datetime);
+                        return eDate.toISOString().slice(0, 10) === cellDateStr && eDate.getHours() === hour;
+                    });
+
+                    if (slotEvents.length > 0) {
+                        rowsHTML += `
+                            <div onclick="openMultiSlotModal('${cellDateStr}', ${hour})" class="p-1 border-r border-[var(--pink-border)] bg-pink-100/50 cursor-pointer hover:bg-pink-200 transition flex flex-col gap-1 overflow-hidden">
+                                ${slotEvents.map(ev => `
+                                    <div class="text-[10px] p-1 rounded font-bold truncate text-white shadow-xs" style="background-color: ${ev.color || 'var(--pink-primary)'}">
+                                        ${ev.title}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    } else {
+                        rowsHTML += `
+                            <div onclick="openQuickAddSlot('${cellDateStr}', ${hour})" class="p-1 border-r border-[var(--pink-border)] hover:bg-pink-50 cursor-pointer transition"></div>
+                        `;
+                    }
+                }
+                rowsHTML += `</div>`;
+            }
+
+            body.innerHTML = rowsHTML;
+        }
+
+        function parseSmartAgendaEvent() {
+            const input = document.getElementById('smart-agenda-input').value.trim();
+            if (!input) return;
+
+            appData.events.unshift({
+                id: 'ev-' + Date.now(),
+                title: input,
+                datetime: new Date().toISOString().slice(0, 16),
+                complexity: 2,
+                color: '#FF66A3'
+            });
+
+            document.getElementById('smart-agenda-input').value = '';
+            renderAgendaGrid();
+            renderHotlist();
+            saveToStorage();
+        }
+
+        function openQuickAddSlot(dateStr, hour) {
+            const padHour = hour.toString().padStart(2, '0');
+            const dt = `${dateStr}T${padHour}:00`;
+
+            document.getElementById('edit-event-id').value = '';
+            document.getElementById('event-title-input').value = '';
+            document.getElementById('event-datetime-input').value = dt;
+            document.getElementById('event-complexity-input').value = '2';
+            document.getElementById('event-color-input').value = '#FF66A3';
+            document.getElementById('event-modal-title').textContent = "Add Task Block";
+            document.getElementById('delete-event-btn').classList.add('hidden');
+
+            openModal('edit-event-modal');
+        }
+
+        function openMultiSlotModal(dateStr, hour) {
+            activeSelectedHourSlot = { dateStr, hour };
+            const padHour = hour.toString().padStart(2, '0');
+            document.getElementById('multi-slot-title').textContent = `Events at ${dateStr} ${padHour}:00`;
+
+            const slotEvents = appData.events.filter(e => {
+                if (!e.datetime) return false;
+                const eDate = new Date(e.datetime);
+                return eDate.toISOString().slice(0, 10) === dateStr && eDate.getHours() === hour;
+            });
+
+            const list = document.getElementById('multi-slot-events-list');
+            list.innerHTML = slotEvents.map(ev => `
+                <div class="p-3 rounded-xl border-2 border-[var(--pink-primary)] flex justify-between items-center bg-white">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full inline-block" style="background-color: ${ev.color || 'var(--pink-primary)'}"></span>
+                            <h4 class="font-bold text-xs text-[var(--pink-dark)]">${ev.title}</h4>
+                        </div>
+                        <p class="text-[10px] text-subtle mt-1">Level: ${ev.complexity || 1} ⭐</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openEditEventModal('${ev.id}')" class="px-2.5 py-1 border rounded text-xs font-bold">Edit</button>
+                    </div>
+                </div>
+            `).join('');
+
+            openModal('agenda-slot-multi-modal');
+        }
+
+        function openEditEventModal(eventId) {
+            closeModal('agenda-slot-multi-modal');
+            const ev = appData.events.find(e => e.id === eventId);
+            if (!ev) return;
+
+            document.getElementById('edit-event-id').value = ev.id;
+            document.getElementById('event-title-input').value = ev.title;
+            document.getElementById('event-datetime-input').value = ev.datetime;
+            document.getElementById('event-complexity-input').value = ev.complexity || 1;
+            document.getElementById('event-color-input').value = ev.color || '#FF66A3';
+            document.getElementById('event-modal-title').textContent = "Edit Task";
+            document.getElementById('delete-event-btn').classList.remove('hidden');
+
+            openModal('edit-event-modal');
+        }
+
+        function addNewEventToSlot() {
+            closeModal('agenda-slot-multi-modal');
+            if (activeSelectedHourSlot) {
+                openQuickAddSlot(activeSelectedHourSlot.dateStr, activeSelectedHourSlot.hour);
+            }
+        }
+
+        function saveEventItem() {
+            const id = document.getElementById('edit-event-id').value;
+            const title = document.getElementById('event-title-input').value.trim();
+            const datetime = document.getElementById('event-datetime-input').value;
+            const complexity = parseInt(document.getElementById('event-complexity-input').value) || 1;
+            const color = document.getElementById('event-color-input').value;
+
+            if (!title || !datetime) return alert("Please fill title and time!");
+
+            if (id) {
+                const idx = appData.events.findIndex(e => e.id === id);
+                if (idx >= 0) {
+                    appData.events[idx] = { id, title, datetime, complexity, color };
+                }
+            } else {
+                appData.events.unshift({ id: 'ev-' + Date.now(), title, datetime, complexity, color });
+            }
+
+            closeModal('edit-event-modal');
+            renderAgendaGrid();
+            renderHotlist();
+            saveToStorage();
+        }
+
+        function deleteEventFromModal() {
+            const id = document.getElementById('edit-event-id').value;
+            if (id) {
+                appData.events = appData.events.filter(e => e.id !== id);
+                closeModal('edit-event-modal');
+                renderAgendaGrid();
+                renderHotlist();
+                saveToStorage();
+            }
+        }
+
+        /* HABITS TAB */
+        function renderHabits() {
+            const tbody = document.getElementById('habits-table-body');
+
+            tbody.innerHTML = appData.habits.map((h, hIdx) => {
+                const checkedCount = h.checks.filter(Boolean).length;
+                const pct = Math.round((checkedCount / 7) * 100);
+
+                let checkCols = '';
+                for (let d = 0; d < 7; d++) {
+                    checkCols += `
+                        <td class="p-3 text-center">
+                            <input type="checkbox" ${h.checks[d] ? 'checked' : ''} onclick="toggleHabitDay(${hIdx}, ${d})" 
+                                class="w-4 h-4 accent-[var(--pink-accent)] cursor-pointer">
+                        </td>
+                    `;
+                }
+
+                return `
+                    <tr class="hover:bg-pink-50/50">
+                        <td class="p-4 font-bold text-[var(--pink-dark)]">${h.title}</td>
+                        <td class="p-3 text-center">${getDecalStarsHTML(h.level)}</td>
+                        ${checkCols}
+                        <td class="p-3 text-center">
+                            <div class="w-full bg-pink-100 rounded-full h-2 border border-pink-300 overflow-hidden">
+                                <div class="bg-[var(--pink-accent)] h-2 rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                            <span class="pixel-font text-[8px] text-[var(--pink-dark)] font-bold">${pct}%</span>
+                        </td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="editHabit(${hIdx})" class="text-xs text-[var(--pink-dark)] hover:text-accent-glam p-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteHabit(${hIdx})" class="text-xs text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function toggleHabitDay(hIdx, dIdx) {
+            const h = appData.habits[hIdx];
+            h.checks[dIdx] = !h.checks[dIdx];
+
+            if (h.checks[dIdx]) {
+                const pts = (h.level || 1) * 10;
+                addCurrency(pts);
+            }
+
+            renderHabits();
+            saveToStorage();
+        }
+
+        function editHabit(idx) {
+            const h = appData.habits[idx];
+            document.getElementById('edit-habit-index').value = idx;
+            document.getElementById('habit-name-input').value = h.title;
+            document.getElementById('habit-complexity-input').value = h.level || 1;
+            document.getElementById('habit-modal-title').textContent = "Edit Habit";
+            openModal('add-habit-modal');
+        }
+
+        function saveHabitItem() {
+            const title = document.getElementById('habit-name-input').value.trim();
+            const level = parseInt(document.getElementById('habit-complexity-input').value) || 1;
+            const idx = parseInt(document.getElementById('edit-habit-index').value);
+
+            if (!title) return alert("Please enter habit name!");
+
+            if (idx >= 0 && idx < appData.habits.length) {
+                appData.habits[idx].title = title;
+                appData.habits[idx].level = level;
+            } else {
+                appData.habits.push({
+                    title,
+                    level,
+                    checks: [false, false, false, false, false, false, false]
+                });
+            }
+
+            closeModal('add-habit-modal');
+            renderHabits();
+            saveToStorage();
+        }
+
+        function deleteHabit(idx) {
+            appData.habits.splice(idx, 1);
+            renderHabits();
+            saveToStorage();
+        }
+
+        /* PET ROOM & CANVAS */
+        function renderPetStatusBars() {
+            const s = appData.activePetStats;
+            document.getElementById('stat-hunger-val').textContent = `${s.hunger}%`;
+            document.getElementById('stat-hunger-bar').style.width = `${s.hunger}%`;
+
+            document.getElementById('stat-happy-val').textContent = `${s.happy}%`;
+            document.getElementById('stat-happy-bar').style.width = `${s.happy}%`;
+
+            document.getElementById('stat-hygiene-val').textContent = `${s.hygiene}%`;
+            document.getElementById('stat-hygiene-bar').style.width = `${s.hygiene}%`;
+
+            document.getElementById('stat-health-val').textContent = `${s.health}%`;
+            document.getElementById('stat-health-bar').style.width = `${s.health}%`;
+        }
+
+        function renderPetRoomCanvas() {
+            const bgLayer = document.getElementById('pet-room-bg-layer');
+            bgLayer.style.backgroundImage = `url('${appData.bedroomBG}')`;
+
+            const canvas = document.getElementById('pet-room-canvas');
+            const hint = document.getElementById('empty-room-hint');
+
+            if (!appData.placedCanvasItems.length) {
+                hint.classList.remove('hidden');
+                canvas.innerHTML = '';
+                return;
+            } else {
+                hint.classList.add('hidden');
+            }
+
+            canvas.innerHTML = appData.placedCanvasItems.map(item => {
+                const cat = appData.masterCatalog.find(m => m.id === item.itemId);
+                if (!cat) return '';
+
+                return `
+                    <div id="${item.instanceId}" 
+                        onmousedown="startDragCanvasItem(event, '${item.instanceId}')"
+                        ontouchstart="startDragCanvasItem(event, '${item.instanceId}')"
+                        class="draggable-canvas-item absolute z-20 cursor-grab group"
+                        style="left: ${item.x}px; top: ${item.y}px;">
+                        
+                        <div class="relative">
+                            <img src="${cat.img}" class="w-20 h-20 object-contain drop-shadow-md select-none pointer-events-none">
+                            <button onclick="removeItemFromCanvas('${item.instanceId}')" class="absolute -top-2 -right-2 bg-white rounded-full w-5 h-5 border border-pink-400 text-red-500 text-[10px] hidden group-hover:flex items-center justify-center shadow-md">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        let currentDraggingItem = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        function startDragCanvasItem(e, instanceId) {
+            e.preventDefault();
+            const item = appData.placedCanvasItems.find(i => i.instanceId === instanceId);
+            if (!item) return;
+
+            currentDraggingItem = item;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            dragOffset.x = clientX - item.x;
+            dragOffset.y = clientY - item.y;
+
+            window.addEventListener('mousemove', onCanvasDragMove);
+            window.addEventListener('touchmove', onCanvasDragMove);
+            window.addEventListener('mouseup', onCanvasDragEnd);
+            window.addEventListener('touchend', onCanvasDragEnd);
+        }
+
+        function onCanvasDragMove(e) {
+            if (!currentDraggingItem) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            currentDraggingItem.x = Math.max(0, clientX - dragOffset.x);
+            currentDraggingItem.y = Math.max(0, clientY - dragOffset.y);
+
+            const el = document.getElementById(currentDraggingItem.instanceId);
+            if (el) {
+                el.style.left = `${currentDraggingItem.x}px`;
+                el.style.top = `${currentDraggingItem.y}px`;
+            }
+        }
+
+        function onCanvasDragEnd() {
+            if (currentDraggingItem) {
+                checkItemDropInteraction(currentDraggingItem.instanceId);
+                currentDraggingItem = null;
+                saveToStorage();
+            }
+            window.removeEventListener('mousemove', onCanvasDragMove);
+            window.removeEventListener('touchmove', onCanvasDragMove);
+            window.removeEventListener('mouseup', onCanvasDragEnd);
+            window.removeEventListener('touchend', onCanvasDragEnd);
+        }
+
+        function checkItemDropInteraction(draggedId) {
+            const dragged = appData.placedCanvasItems.find(i => i.instanceId === draggedId);
+            if (!dragged) return;
+
+            const draggedCat = appData.masterCatalog.find(m => m.id === dragged.itemId);
+            if (!draggedCat || draggedCat.type === 'pet') return;
+
+            const petsInRoom = appData.placedCanvasItems.filter(i => {
+                const cat = appData.masterCatalog.find(m => m.id === i.itemId);
+                return cat && cat.type === 'pet';
+            });
+
+            petsInRoom.forEach(petItem => {
+                const petCat = appData.masterCatalog.find(m => m.id === petItem.itemId);
+                const dx = Math.abs(dragged.x - petItem.x);
+                const dy = Math.abs(dragged.y - petItem.y);
+
+                if (dx < 80 && dy < 80) {
+                    const isFav = petCat.favItems && petCat.favItems.includes(dragged.itemId);
+                    const mult = isFav ? 2 : 1;
+
+                    if (draggedCat.boost) {
+                        if (draggedCat.boost.hunger) appData.activePetStats.hunger = Math.min(100, appData.activePetStats.hunger + (draggedCat.boost.hunger * mult));
+                        if (draggedCat.boost.happy) appData.activePetStats.happy = Math.min(100, appData.activePetStats.happy + (draggedCat.boost.happy * mult));
+                        if (draggedCat.boost.hygiene) appData.activePetStats.hygiene = Math.min(100, appData.activePetStats.hygiene + (draggedCat.boost.hygiene * mult));
+                        if (draggedCat.boost.health) appData.activePetStats.health = Math.min(100, appData.activePetStats.health + (draggedCat.boost.health * mult));
+                    }
+
+                    showPetChatBubble(petItem.x, petItem.y);
+                    appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== draggedId);
+                    renderPetRoomCanvas();
+                    renderPetStatusBars();
+                    saveToStorage();
+                }
+            });
+        }
+
+        function showPetChatBubble(x, y) {
+            const bubbleURL = "https://dl5.glitter-graphics.net/pub/3783/3783195yt1z9msh3d.gif";
+            const canvas = document.getElementById('pet-room-canvas');
+
+            const img = document.createElement('img');
+            img.src = bubbleURL;
+            img.className = 'pet-speech-bubble absolute w-16 h-16 pointer-events-none z-30';
+            img.style.left = `${x + 20}px`;
+            img.style.top = `${y - 50}px`;
+
+            canvas.appendChild(img);
+            setTimeout(() => img.remove(), 2500);
+        }
+
+        function removeItemFromCanvas(instanceId) {
+            appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== instanceId);
+            renderPetRoomCanvas();
+            saveToStorage();
+        }
+
+        function saveCustomBedroomBG() {
+            const url = document.getElementById('custom-bg-url-input').value.trim();
+            if (url) {
+                appData.bedroomBG = url;
+                closeModal('custom-bg-modal');
+                renderPetRoomCanvas();
+                saveToStorage();
+            }
+        }
+
+        /* BOUTIQUE & INVENTORY */
+        function renderDailyShopCatalog() {
+            const grid = document.getElementById('daily-shop-grid');
+            const categories = ['pet', 'food', 'toy', 'hygiene'];
+            const featuredItems = [];
+
+            categories.forEach(cat => {
+                const items = appData.masterCatalog.filter(i => i.type === cat);
+                if (items.length) featuredItems.push(items[0]);
+            });
+
+            grid.innerHTML = featuredItems.map(item => `
+                <div class="retro-box p-4 bg-white flex flex-col justify-between space-y-3">
+                    <div class="w-full h-36 rounded-xl overflow-hidden ${item.transparent ? 'bg-pink-100/40 flex items-center justify-center p-2' : 'bg-pink-50'} relative">
+                        <img src="${item.img}" class="${item.transparent ? 'max-h-full max-w-full object-contain' : 'w-full h-full object-cover'}">
+                        <span class="absolute top-2 right-2 pixel-font text-[8px] bg-[var(--pink-accent)] text-white px-2 py-0.5 rounded uppercase">${item.type}</span>
+                    </div>
+                    <div>
+                        <h4 class="custom-title-font font-bold text-sm text-[var(--pink-dark)] flex items-center gap-1.5">
+                            <i class="${item.icon || 'fa-solid fa-gift'} text-accent-glam"></i> ${item.name}
+                        </h4>
+                        <p class="pixel-font text-[10px] text-accent-glam mt-1 flex items-center gap-1">
+                            <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 object-contain"> ${item.price} Lovas
+                        </p>
+                    </div>
+                    <button onclick="buyBoutiqueItem('${item.id}', ${item.price})" class="retro-button w-full py-2 rounded-xl text-xs font-bold">
+                        Buy Item
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function buyBoutiqueItem(itemId, price) {
+            if (appData.currency < price) return alert("Not enough Lovas!");
+
+            appData.currency -= price;
+            const existing = appData.inventory.find(i => i.itemId === itemId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                appData.inventory.push({ itemId, qty: 1 });
+            }
+
+            updateCurrencyUI();
+            saveToStorage();
+            alert("✨ Item purchased and added to your Inventory Backpack!");
+        }
+
+        function toggleBackpackModal() {
+            renderInventoryGrid();
+            openModal('backpack-modal');
+        }
+
+        function renderInventoryGrid() {
+            const grid = document.getElementById('inventory-items-grid');
+            if (!appData.inventory.length) {
+                grid.innerHTML = `<p class="col-span-full text-center text-xs text-subtle py-6">Your inventory is empty!</p>`;
+                return;
+            }
+
+            grid.innerHTML = appData.inventory.map(inv => {
+                const cat = appData.masterCatalog.find(m => m.id === inv.itemId);
+                if (!cat) return '';
+
+                return `
+                    <div class="p-3 border-2 border-[var(--pink-primary)] rounded-xl bg-pink-50/50 flex flex-col justify-between items-center text-center space-y-2">
+                        <img src="${cat.img}" class="w-14 h-14 object-contain">
+                        <div>
+                            <h5 class="font-bold text-xs text-[var(--pink-dark)]">${cat.name}</h5>
+                            <span class="pixel-font text-[9px] text-accent-glam">Qty: ${inv.qty}</span>
+                        </div>
+                        <button onclick="placeInventoryItemToRoom('${inv.itemId}')" class="retro-button w-full py-1 text-[10px] font-bold rounded-lg">
+                            Place in Room
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function placeInventoryItemToRoom(itemId) {
+            const inv = appData.inventory.find(i => i.itemId === itemId);
+            if (!inv || inv.qty <= 0) return;
+
+            inv.qty--;
+            if (inv.qty <= 0) {
+                appData.inventory = appData.inventory.filter(i => i.itemId !== itemId);
+            }
+
+            appData.placedCanvasItems.push({
+                instanceId: 'inst-' + Date.now(),
+                itemId,
+                x: 100 + Math.random() * 80,
+                y: 120 + Math.random() * 80
+            });
+
+            closeModal('backpack-modal');
+            renderPetRoomCanvas();
+            updateCurrencyUI();
+            saveToStorage();
+        }
+
+        /* MASTER CATALOG EDITOR */
+        function openAddNewCatalogItemForm() {
+            document.getElementById('edit-cat-item-id').value = '';
+            document.getElementById('cat-name-input').value = '';
+            document.getElementById('cat-price-input').value = '30';
+            document.getElementById('cat-img-input').value = '';
+            document.getElementById('cat-transparent-input').checked = false;
+            document.getElementById('catalog-form-title').textContent = "Create Catalog Item";
+            openModal('catalog-item-form-modal');
+        }
+
+        function saveCatalogItem() {
+            const name = document.getElementById('cat-name-input').value.trim();
+            const type = document.getElementById('cat-type-input').value;
+            const price = parseInt(document.getElementById('cat-price-input').value) || 20;
+            const img = document.getElementById('cat-img-input').value.trim();
+            const transparent = document.getElementById('cat-transparent-input').checked;
+
+            if (!name || !img) return alert("Please enter item name and image URL!");
+
+            appData.masterCatalog.unshift({
+                id: 'cat-custom-' + Date.now(),
+                name,
+                type,
+                price,
+                img,
+                transparent,
+                icon: type === 'pet' ? 'fa-paw' : (type === 'food' ? 'fa-utensils' : 'fa-gift')
+            });
+
+            closeModal('catalog-item-form-modal');
+            renderDailyShopCatalog();
+            saveToStorage();
+        }
+
+        /* GENERAL MODAL CONTROLS */
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
         function toggleCustomBgInput(val) {
             const wrapper = document.getElementById('custom-bg-url-wrapper');
             if (val === 'custom') {
@@ -910,211 +1953,15 @@
             } else if (t.bgPreset === 'hearts') {
                 body.style.backgroundImage = `radial-gradient(${t.primary} 3px, transparent 4px), radial-gradient(${t.accent} 3px, ${t.secondary} 4px)`;
                 body.style.backgroundSize = '30px 30px';
-                body.style.backgroundPosition = '0 0, 15px 15px';
             } else if (t.bgPreset === 'stripes') {
                 body.style.backgroundImage = `repeating-linear-gradient(45deg, ${t.secondary}, ${t.secondary} 15px, #FFFFFF 15px, #FFFFFF 30px)`;
-                body.style.backgroundSize = 'auto';
             } else if (t.bgPreset === 'custom' && t.bgUrl) {
                 body.style.backgroundImage = `url('${t.bgUrl}')`;
                 body.style.backgroundSize = 'cover';
-                body.style.backgroundPosition = 'center';
             } else {
-                // Default polka dots
                 body.style.backgroundImage = `radial-gradient(var(--pink-border) 1.2px, transparent 1.2px), radial-gradient(var(--pink-border) 1.2px, var(--pink-secondary) 1.2px)`;
                 body.style.backgroundSize = '24px 24px';
-                body.style.backgroundPosition = '0 0, 12px 12px';
             }
-        }
-
-        /* Enhanced Add Currency with Scatter Particles */
-        function addCurrency(pts) {
-            appData.currency += pts;
-            updateCurrencyUI();
-            triggerTaskConfetti();
-        }
-
-        /* Update Hotlist rendering to use custom Decal stars */
-        function renderHotlist() {
-            const grid = document.getElementById('hotlist-grid');
-            const now = new Date();
-            
-            let filtered = appData.events.filter(ev => {
-                const evDate = new Date(ev.datetime);
-                if (isNaN(evDate)) return true;
-
-                if (appData.hotlistFilter === 'today') {
-                    return evDate.toDateString() === now.toDateString();
-                } else if (appData.hotlistFilter === 'week') {
-                    const next7Days = new Date(now);
-                    next7Days.setDate(now.getDate() + 7);
-                    return evDate >= now && evDate <= next7Days;
-                } else if (appData.hotlistFilter === 'nextweek') {
-                    const startNext = new Date(now);
-                    startNext.setDate(now.getDate() + 7);
-                    const endNext = new Date(now);
-                    endNext.setDate(now.getDate() + 14);
-                    return evDate >= startNext && evDate <= endNext;
-                } else if (appData.hotlistFilter === 'month') {
-                    return evDate.getMonth() === now.getMonth() && evDate.getFullYear() === now.getFullYear();
-                }
-                return true;
-            });
-
-            if (!filtered.length) {
-                grid.innerHTML = `<p class="col-span-full text-center text-xs text-subtle py-8">No matching timeline events!</p>`;
-                return;
-            }
-
-            grid.innerHTML = filtered.map(item => {
-                const reward = (item.complexity || 1) * 10;
-                return `
-                    <div class="retro-box p-5 bg-white space-y-3 flex flex-col justify-between border-l-8" style="border-left-color: ${item.color || 'var(--pink-primary)'}">
-                        <div>
-                            <div class="flex justify-between items-center">
-                                <span class="pixel-font text-[9px] text-accent-glam uppercase">DUE SOON</span>
-                                <span class="flex items-center">${getDecalStarsHTML(item.complexity)}</span>
-                            </div>
-                            <h4 class="custom-title-font font-bold text-base text-[var(--pink-dark)] mt-1">${item.title}</h4>
-                            <p class="text-xs text-subtle italic mt-1">${new Date(item.datetime).toLocaleString()}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="openEditEventModal('${item.id}')" class="px-3 py-1.5 border border-pink-300 rounded-lg text-xs font-bold hover:bg-pink-50">Edit</button>
-                            <button onclick="completeEventTask('${item.id}')" class="retro-button flex-grow py-1.5 rounded-lg text-xs font-bold">Complete (+ <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 inline-block"> ${reward})</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        /* Render Habits table with Decal stars */
-        function renderHabits() {
-            const tbody = document.getElementById('habits-table-body');
-
-            tbody.innerHTML = appData.habits.map((h, hIdx) => {
-                const checkedCount = h.checks.filter(Boolean).length;
-                const pct = Math.round((checkedCount / 7) * 100);
-
-                let checkCols = '';
-                for (let d = 0; d < 7; d++) {
-                    checkCols += `
-                        <td class="p-3 text-center">
-                            <input type="checkbox" ${h.checks[d] ? 'checked' : ''} onclick="toggleHabitDay(${hIdx}, ${d})" 
-                                class="w-4 h-4 accent-[var(--pink-accent)] cursor-pointer">
-                        </td>
-                    `;
-                }
-
-                return `
-                    <tr class="hover:bg-pink-50/50">
-                        <td class="p-4 font-bold text-[var(--pink-dark)]">${h.title}</td>
-                        <td class="p-3 text-center">${getDecalStarsHTML(h.level)}</td>
-                        ${checkCols}
-                        <td class="p-3 text-center">
-                            <div class="w-full bg-pink-100 rounded-full h-2 border border-pink-300 overflow-hidden">
-                                <div class="bg-[var(--pink-accent)] h-2 rounded-full" style="width: ${pct}%"></div>
-                            </div>
-                            <span class="pixel-font text-[8px] text-[var(--pink-dark)] font-bold">${pct}%</span>
-                        </td>
-                        <td class="p-3 text-center space-x-1">
-                            <button onclick="editHabit(${hIdx})" class="text-xs text-[var(--pink-dark)] hover:text-accent-glam"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteHabit(${hIdx})" class="text-xs text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        /* Daily Shop render with Lovas text */
-        function renderDailyShopCatalog() {
-            const grid = document.getElementById('daily-shop-grid');
-            const categories = ['pet', 'food', 'toy', 'hygiene'];
-            const featuredItems = [];
-
-            categories.forEach(cat => {
-                const itemsInCat = appData.masterCatalog.filter(i => i.type === cat);
-                if (itemsInCat.length) {
-                    featuredItems.push(itemsInCat[0]);
-                }
-            });
-
-            grid.innerHTML = featuredItems.map(item => `
-                <div class="retro-box p-4 bg-white flex flex-col justify-between space-y-3">
-                    <div class="w-full h-36 rounded-xl overflow-hidden ${item.transparent ? 'bg-pink-100/40 flex items-center justify-center p-2' : 'bg-pink-50'} relative">
-                        <img src="${item.img}" class="${item.transparent ? 'max-h-full max-w-full object-contain' : 'w-full h-full object-cover'}">
-                        <span class="absolute top-2 right-2 pixel-font text-[8px] bg-[var(--pink-accent)] text-white px-2 py-0.5 rounded uppercase">${item.type}</span>
-                    </div>
-                    <div>
-                        <h4 class="custom-title-font font-bold text-sm text-[var(--pink-dark)] flex items-center gap-1.5">
-                            <i class="${item.icon} text-accent-glam"></i> ${item.name}
-                        </h4>
-                        <p class="pixel-font text-[10px] text-accent-glam mt-1 flex items-center gap-1">
-                            <img src="https://dl2.glitter-graphics.net/pub/558/558162xaex8fdvtb.gif" class="w-3.5 h-3 object-contain"> ${item.price} Lovas
-                        </p>
-                    </div>
-                    <button onclick="buyBoutiqueItem('${item.id}', ${item.price})" class="retro-button w-full py-2 rounded-xl text-xs font-bold">
-                        Buy Item
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        /* Check Item Drop on Pet with Heart Chat Bubble Popup */
-        function checkItemDropInteraction(draggedId) {
-            const dragged = appData.placedCanvasItems.find(i => i.instanceId === draggedId);
-            if (!dragged) return;
-
-            const draggedCat = appData.masterCatalog.find(m => m.id === dragged.itemId);
-            if (!draggedCat || draggedCat.type === 'pet') return;
-
-            const petsInRoom = appData.placedCanvasItems.filter(i => {
-                const cat = appData.masterCatalog.find(m => m.id === i.itemId);
-                return cat && cat.type === 'pet';
-            });
-
-            petsInRoom.forEach(petItem => {
-                const petCat = appData.masterCatalog.find(m => m.id === petItem.itemId);
-                const dx = Math.abs(dragged.x - petItem.x);
-                const dy = Math.abs(dragged.y - petItem.y);
-
-                if (dx < 70 && dy < 70) {
-                    const isFav = petCat.favItems && petCat.favItems.includes(dragged.itemId);
-                    const multiplier = isFav ? 2 : 1;
-
-                    if (draggedCat.boost) {
-                        if (draggedCat.boost.hunger) appData.activePetStats.hunger = Math.min(100, appData.activePetStats.hunger + (draggedCat.boost.hunger * multiplier));
-                        if (draggedCat.boost.happy) appData.activePetStats.happy = Math.min(100, appData.activePetStats.happy + (draggedCat.boost.happy * multiplier));
-                        if (draggedCat.boost.hygiene) appData.activePetStats.hygiene = Math.min(100, appData.activePetStats.hygiene + (draggedCat.boost.hygiene * multiplier));
-                        if (draggedCat.boost.health) appData.activePetStats.health = Math.min(100, appData.activePetStats.health + (draggedCat.boost.health * multiplier));
-                    }
-
-                    // Trigger Pet Speech Heart Bubble
-                    showPetChatBubble(petItem.x, petItem.y);
-
-                    if (isFav) {
-                        alert(`✨ Loved it! ${petCat.name} adored their favorite ${draggedCat.name}! Double bonus boost! 💕`);
-                    }
-
-                    appData.placedCanvasItems = appData.placedCanvasItems.filter(i => i.instanceId !== draggedId);
-                    renderPetRoomCanvas();
-                    renderPetStatusBars();
-                    saveToStorage();
-                }
-            });
-        }
-
-        /* Pet Heart Chat Bubble Renderer */
-        function showPetChatBubble(x, y) {
-            const bubbleURL = "https://dl5.glitter-graphics.net/pub/3783/3783195yt1z9msh3d.gif";
-            const canvas = document.getElementById('pet-room-canvas');
-
-            const img = document.createElement('img');
-            img.src = bubbleURL;
-            img.className = 'pet-speech-bubble absolute w-16 h-16 pointer-events-none z-30';
-            img.style.left = `${x + 20}px`;
-            img.style.top = `${y - 50}px`;
-
-            canvas.appendChild(img);
-            setTimeout(() => img.remove(), 2500);
         }
     </script>
 </body>
