@@ -199,6 +199,10 @@
                 <button onclick="toggleBackpackModal()" class="retro-button px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5" title="Open Inventory Backpack">
                     <i class="fa-solid fa-bag-shopping"></i> Inventory (<span id="inventory-badge-count">0</span>)
                 </button>
+                <!-- Cloud Account / Auth Sync Button -->
+                <button onclick="openModal('auth-account-modal')" id="account-btn" class="bg-white border-2 border-[var(--pink-primary)] text-[var(--pink-dark)] hover:bg-pink-50 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-xs">
+                    <i class="fa-solid fa-user text-accent-glam"></i> <span id="account-btn-label">Account Sync</span>
+                </button>
             </div>
 
             <!-- Navigation Tabs -->
@@ -561,6 +565,73 @@
 
 
     <!-- ================= ALL MODALS & POPUPS ================= -->
+
+    <!-- Cloud Account & Firebase Auth Sync Modal -->
+    <div id="auth-account-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="retro-box max-w-md w-full p-6 bg-white space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-[var(--pink-border)] pb-2">
+                <h3 class="custom-title-font font-bold text-lg text-[var(--pink-dark)]"><i class="fa-solid fa-cloud-arrow-up text-accent-glam"></i> Cloud Sync & Account</h3>
+                <button onclick="closeModal('auth-account-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Logged-in view vs Guest view -->
+            <div id="auth-status-banner" class="p-3 bg-pink-50 border border-pink-200 rounded-xl flex justify-between items-center text-xs">
+                <div>
+                    <p class="font-bold text-[var(--pink-dark)]" id="auth-user-status">Status: Local / Guest Mode</p>
+                    <p class="text-[10px] text-subtle" id="auth-user-sub">Data saved in browser localStorage.</p>
+                </div>
+                <button id="auth-signout-btn" onclick="handleSignOut()" class="hidden text-xs text-red-500 hover:underline font-bold">Sign Out</button>
+            </div>
+
+            <!-- Firebase Login/Register Form -->
+            <div id="auth-form-container" class="space-y-3 text-xs">
+                <div class="flex border-b border-pink-200 pb-2 gap-2">
+                    <button onclick="switchAuthMode('signin')" id="auth-mode-signin-btn" class="flex-1 py-1 font-bold text-center border-b-2 border-[var(--pink-primary)] text-[var(--pink-dark)]">Sign In</button>
+                    <button onclick="switchAuthMode('signup')" id="auth-mode-signup-btn" class="flex-1 py-1 font-bold text-center text-subtle">Create Account</button>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Email Address</label>
+                    <input type="email" id="auth-email-input" placeholder="glam@pinklove.com" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-[var(--pink-dark)] mb-1">Password</label>
+                    <input type="password" id="auth-password-input" placeholder="••••••••" class="w-full p-2.5 border-2 border-[var(--pink-primary)] rounded-xl focus:outline-none">
+                </div>
+                <div id="auth-error-msg" class="hidden text-red-500 font-bold text-[11px]"></div>
+
+                <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="retro-button w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In & Sync Devices
+                </button>
+            </div>
+
+            <!-- Zero-Setup Backup Option (Import/Export JSON Vault) -->
+            <div class="border-t-2 border-[var(--pink-primary)] pt-3 space-y-2">
+                <h4 class="custom-title-font font-bold text-xs text-[var(--pink-dark)]"><i class="fa-solid fa-vault text-accent-glam"></i> Zero-Setup Vault Backup (Offline / Any Host)</h4>
+                <p class="text-[11px] text-subtle">Instantly export your data as a JSON file and import it on your phone or any browser without Firebase setup.</p>
+                <div class="flex gap-2">
+                    <button onclick="exportVaultJSON()" class="flex-1 py-2 bg-pink-100 hover:bg-pink-200 text-[var(--pink-dark)] border border-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-download"></i> Export Data (.json)
+                    </button>
+                    <label class="flex-1 py-2 bg-pink-100 hover:bg-pink-200 text-[var(--pink-dark)] border border-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-upload"></i> Import Data
+                        <input type="file" id="import-json-file" accept=".json" onchange="importVaultJSON(event)" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Firebase Configuration Setup Drawer -->
+            <div class="border-t border-pink-200 pt-3">
+                <button onclick="toggleFirebaseConfigForm()" class="text-[11px] font-bold text-accent-glam hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-gear"></i> Connect Custom Firebase Config (Optional)
+                </button>
+                <div id="firebase-config-wrapper" class="hidden space-y-2 mt-2">
+                    <textarea id="firebase-config-json" rows="4" placeholder='{"apiKey": "...", "authDomain": "...", "projectId": "..."}' class="w-full p-2 border border-pink-300 rounded-xl text-[10px] font-mono"></textarea>
+                    <button onclick="saveFirebaseConfig()" class="px-3 py-1 bg-pink-200 text-[var(--pink-dark)] rounded-lg text-xs font-bold">Save Firebase Config</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Inventory / Backpack Modal -->
     <div id="backpack-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
@@ -927,10 +998,23 @@
 
 
     <!-- ================= MAIN CORE SCRIPT ================= -->
+    <!-- Firebase Web SDK v9 Compatibility Layer -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <script>
         /* GLOBAL APPLICATION STATE & DATA MODEL */
         const STORAGE_KEY = 'PinkLovePlanner_State_v4';
+        const FIREBASE_CONFIG_KEY = 'PinkLovePlanner_Firebase_Config';
 
+        let firebaseApp = null;
+        let firebaseAuth = null;
+        let firebaseDB = null;
+        let authMode = 'signin';
+        let currentUser = null;
+
+        // Default appData structure
         let appData = {
             currency: 150,
             activeTab: 'landing',
@@ -1003,23 +1087,203 @@
             }
         };
 
-        let pinboardTimer = null;
-        let activeSelectedHourSlot = null;
-
-        /* INITIALIZATION ON DOM READY */
+        /* INITIALIZATION & FIREBASE SETUP */
         window.onload = function() {
             loadFromStorage();
+            initFirebaseIfAvailable();
             updateGlobalThemeStyles();
             switchTab(appData.activeTab || 'landing');
             startPinboardTimer();
             updateCurrencyUI();
         };
 
+        function initFirebaseIfAvailable() {
+            try {
+                let configRaw = localStorage.getItem(FIREBASE_CONFIG_KEY);
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    configRaw = __firebase_config;
+                }
+                if (configRaw) {
+                    const cfg = typeof configRaw === 'string' ? JSON.parse(configRaw) : configRaw;
+                    if (cfg && cfg.apiKey) {
+                        firebaseApp = firebase.initializeApp(cfg);
+                        firebaseAuth = firebase.auth();
+                        firebaseDB = firebase.firestore();
+
+                        firebaseAuth.onAuthStateChanged(user => {
+                            currentUser = user;
+                            updateAuthUI();
+                            if (user) {
+                                fetchUserDataFromCloud(user.uid);
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn("Firebase Init bypassed / not configured", e);
+            }
+        }
+
         function saveToStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                syncDataToCloud();
             } catch (e) {
                 console.error("Storage save failed", e);
+            }
+        }
+
+        /* CLOUD SYNC FUNCTIONS */
+        function syncDataToCloud() {
+            if (!currentUser || !firebaseDB) return;
+            try {
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'pink-planner-app';
+                const userDocRef = firebaseDB.collection('artifacts').doc(appId).collection('users').doc(currentUser.uid).collection('userData').doc('plannerState');
+                userDocRef.set(appData, { merge: true });
+            } catch (e) {
+                console.warn("Cloud Firestore save failed", e);
+            }
+        }
+
+        function fetchUserDataFromCloud(uid) {
+            if (!firebaseDB) return;
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'pink-planner-app';
+            const userDocRef = firebaseDB.collection('artifacts').doc(appId).collection('users').doc(uid).collection('userData').doc('plannerState');
+            
+            userDocRef.get().then(doc => {
+                if (doc.exists) {
+                    appData = { ...appData, ...doc.data() };
+                    saveToStorage();
+                    updateGlobalThemeStyles();
+                    switchTab(appData.activeTab || 'landing');
+                    updateCurrencyUI();
+                } else {
+                    syncDataToCloud(); // Push local state to newly logged in user
+                }
+            }).catch(err => console.warn("Fetch cloud data failed", err));
+        }
+
+        /* AUTH UI & ACTIONS */
+        function updateAuthUI() {
+            const label = document.getElementById('account-btn-label');
+            const status = document.getElementById('auth-user-status');
+            const sub = document.getElementById('auth-user-sub');
+            const signoutBtn = document.getElementById('auth-signout-btn');
+            const formContainer = document.getElementById('auth-form-container');
+
+            if (currentUser) {
+                label.textContent = currentUser.email ? currentUser.email.split('@')[0] : 'Cloud User';
+                status.textContent = `Synced: ${currentUser.email || 'Anonymous Cloud User'}`;
+                sub.textContent = "Data auto-syncs live across all your logged-in devices!";
+                signoutBtn.classList.remove('hidden');
+                formContainer.classList.add('hidden');
+            } else {
+                label.textContent = 'Account Sync';
+                status.textContent = "Status: Local / Guest Mode";
+                sub.textContent = "Data saved in browser localStorage.";
+                signoutBtn.classList.add('hidden');
+                formContainer.classList.remove('hidden');
+            }
+        }
+
+        function switchAuthMode(mode) {
+            authMode = mode;
+            document.getElementById('auth-mode-signin-btn').className = mode === 'signin' ? "flex-1 py-1 font-bold text-center border-b-2 border-[var(--pink-primary)] text-[var(--pink-dark)]" : "flex-1 py-1 font-bold text-center text-subtle";
+            document.getElementById('auth-mode-signup-btn').className = mode === 'signup' ? "flex-1 py-1 font-bold text-center border-b-2 border-[var(--pink-primary)] text-[var(--pink-dark)]" : "flex-1 py-1 font-bold text-center text-subtle";
+            document.getElementById('auth-submit-btn').innerHTML = mode === 'signin' ? `<i class="fa-solid fa-right-to-bracket"></i> Sign In & Sync Devices` : `<i class="fa-solid fa-user-plus"></i> Create Account & Sync`;
+        }
+
+        function handleAuthSubmit() {
+            const email = document.getElementById('auth-email-input').value.trim();
+            const password = document.getElementById('auth-password-input').value;
+            const errEl = document.getElementById('auth-error-msg');
+            errEl.classList.add('hidden');
+
+            if (!firebaseAuth) {
+                errEl.textContent = "Firebase is not configured! Please use the Export/Import JSON Vault backup below.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (!email || !password) {
+                errEl.textContent = "Please provide both email and password.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (authMode === 'signin') {
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .then(() => closeModal('auth-account-modal'))
+                    .catch(err => {
+                        errEl.textContent = err.message;
+                        errEl.classList.remove('hidden');
+                    });
+            } else {
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .then(() => closeModal('auth-account-modal'))
+                    .catch(err => {
+                        errEl.textContent = err.message;
+                        errEl.classList.remove('hidden');
+                    });
+            }
+        }
+
+        function handleSignOut() {
+            if (firebaseAuth) firebaseAuth.signOut();
+            currentUser = null;
+            updateAuthUI();
+        }
+
+        /* JSON EXPORT / IMPORT VAULT BACKUP */
+        function exportVaultJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `PinkLove_Planner_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importVaultJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && typeof parsed === 'object') {
+                        appData = { ...appData, ...parsed };
+                        saveToStorage();
+                        updateGlobalThemeStyles();
+                        switchTab(appData.activeTab || 'landing');
+                        updateCurrencyUI();
+                        alert("✨ Planner Vault imported successfully!");
+                        closeModal('auth-account-modal');
+                    }
+                } catch (err) {
+                    alert("Invalid JSON data file!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function toggleFirebaseConfigForm() {
+            const wrapper = document.getElementById('firebase-config-wrapper');
+            wrapper.classList.toggle('hidden');
+        }
+
+        function saveFirebaseConfig() {
+            const raw = document.getElementById('firebase-config-json').value.trim();
+            if (!raw) return;
+            try {
+                JSON.parse(raw);
+                localStorage.setItem(FIREBASE_CONFIG_KEY, raw);
+                initFirebaseIfAvailable();
+                alert("Firebase config saved! You can now log in and sync.");
+            } catch (e) {
+                alert("Invalid JSON config snippet.");
             }
         }
 
